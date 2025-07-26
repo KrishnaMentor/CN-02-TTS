@@ -1,0 +1,3536 @@
+SHOW DATABASES;
+CREATE DATABASE bike_sales;
+DROP DATABASE bike_sales;
+USE bike_sales;
+SELECT DATABASE();
+SHOW TABLES;
+DESC customers;
+SELECT * FROM Customers;
+DROP TABLE Customers;
+
+-- Comment
+/*
+	Multiple Comments
+    with multi line
+*/
+
+-- WHERE Clause
+-- Filter ALL the Female Customers. 
+SELECT 
+	FirstName, 
+    LastName, 
+    Gender
+FROM Customers
+WHERE Gender = 'F'
+LIMIT 10;
+
+-- Filter All the Married Female 
+SELECT 
+	Prefix,
+	FirstName,
+    LastName,
+    Gender,
+    MaritalStatus
+FROM Customers
+WHERE Prefix = "Mrs."
+LIMIT 10;
+-- To check the distinct Marital Status 
+SELECT Distinct MaritalStatus FROM Customers;
+-- AND LOGIC [To Find the Married Female]
+SELECT 
+	FirstName,
+    LastName,
+    Gender,
+    MaritalStatus
+FROM Customers
+WHERE Gender = 'F' AND MaritalStatus = 'M'
+LIMIT 10;
+
+-- Find Customers having TotalChildren >=2;
+SELECT 
+	FirstName,
+    LastName,
+    Gender,
+    MaritalStatus,
+    TotalChildren
+FROM Customers
+WHERE NOT TotalChildren = 4
+LIMIT 10;
+
+-- Applying Filter on Occupation & EducationLevel
+SELECT 
+	FirstName,
+    LastName,
+    AnnualIncome,
+    EducationLevel,
+    Occupation
+FROM Customers
+WHERE EducationLevel LIKE "Bachelors" AND Occupation LIKE "Professional"
+LIMIT 10;
+
+SELECT 
+	FirstName,
+    LastName,
+    MaritalStatus,
+    TotalChildren
+FROM Customers
+WHERE MaritalStatus LIKE "M" AND TotalChildren = 0
+LIMIT 10;
+
+SELECT 
+	FirstName,
+    LastName,
+    HomeOwner
+FROM Customers
+WHERE HomeOwner = 'N'
+LIMIT 10;
+
+SELECT 
+	FirstName,
+    LastName
+FROM Customers
+WHERE FirstName LIKE 'H%'
+LIMIT 10;
+
+SELECT 
+	FirstName,
+    LastName
+FROM Customers
+WHERE LastName LIKE '%S'
+LIMIT 10;
+	
+SELECT 
+	FirstName,
+    LastName
+FROM Customers
+WHERE FirstName LIKE '%AN%'
+LIMIT 10;
+
+SELECT 
+	FirstName,
+    LastName
+FROM Customers
+WHERE LastName LIKE '%A_G'
+LIMIT 10;
+
+SELECT 
+	FirstName,
+    LastName
+FROM Customers
+WHERE FirstName LIKE '_A__E'
+LIMIT 10;
+
+-- Filter out all customer having Occupation 
+-- Professional, Management, clerical.
+
+SELECT 
+	FirstName,
+    Gender,
+    AnnualIncome,
+    Occupation
+FROM Customers
+WHERE Occupation IN ("Professional", "Management", "Clerical")
+LIMIT 20;
+
+
+SELECT 
+	FirstName,
+    Gender,
+    AnnualIncome,
+    Occupation,
+    EducationLevel
+FROM Customers
+WHERE Occupation IN ("Professional", "Management", "Clerical")
+AND
+EducationLevel IN ("Bachelors", "Graduate Degree");
+
+-- NOT IN
+SELECT 
+	FirstName,
+    Gender,
+    AnnualIncome,
+    Occupation
+FROM Customers
+WHERE Occupation NOT IN ("Professional", "Management", "Clerical")
+LIMIT 20;
+
+-- BETWEEN
+SELECT 
+	FirstName,
+    Gender,
+    AnnualIncome,
+    Occupation,
+    TotalChildren
+FROM Customers
+WHERE TotalChildren BETWEEN 1 AND 4
+LIMIT 10;
+
+-- ORDER BY [Products]
+USE bike_sales;
+SELECT * FROM Products;
+
+DESCRIBE Products; -- DESC with Table Name [Abbreviation] [Describe]
+
+SELECT 
+	ProductName,
+    ModelName,
+    ProductColor,
+    ProductCost
+FROM Products
+ORDER BY ProductCost
+LIMIT 10;
+
+-- ORDER BY With Index
+SELECT 
+	ProductName,
+    ModelName,
+    ProductColor,
+    ProductCost
+FROM Products
+ORDER BY ProductCost DESC, ProductName DESC -- DESC [With ORDER BY] [Descending]
+LIMIT 10;
+
+-- Top 10 Products based on Product Price
+SELECT 
+	ProductName,
+    ModelName,
+    ProductColor,
+    ProductPrice
+FROM Products
+ORDER BY ProductPrice DESC
+LIMIT 10 OFFSET 5;
+
+SELECT 
+	ProductName,
+    ModelName,
+    ProductColor,
+    ProductPrice
+FROM Products
+ORDER BY ProductPrice DESC
+LIMIT 20 OFFSET 5;
+
+
+SELECT 
+	ProductKey AS Id,
+	ProductName,
+    ModelName,
+    ProductColor,
+    ProductPrice
+FROM Products
+ORDER BY ProductPrice DESC
+LIMIT 10;
+
+SELECT 
+	CustomerKey AS CustomerID,
+    CONCAT(Prefix , " " , FirstName, " ", LastName) AS CustomerName
+FROM Customers
+LIMIT 10;
+
+CREATE DATABASE bike_analysis;
+USE bike_analysis;
+
+-- Importing all file once in Command line with below code.
+CREATE DATABASE bike_sales_analysis;
+USE bike_sales_analysis;
+-- Don't forget to change '\' to '/' in file path
+-- SOURCE C:/Users/krish/Documents/Lecture Notes/CN02/MySQL Lecture Notes/Dataset/sales_dataset.sql;
+
+
+-- CREATE A TABLE
+CREATE TABLE CodingNinja(
+	user_id INT AUTO_INCREMENT, -- NOT NULL & UNIQUE
+    StudentName varchar(50) NOT NULL DEFAULT 'Unknown',
+    Gender char(1),
+    Email varchar(100) UNIQUE,
+    age int,
+    IsActive Boolean,
+    PRIMARY KEY(user_id)
+);
+
+-- DROP TABLE CodingNinja;
+-- INSERT COMMAND
+INSERT INTO CodingNinja(StudentName,Gender,age)
+VALUES('Shalu Kumari','F',24);
+
+INSERT INTO CodingNinja(IsActive,StudentName,age,Gender)
+VALUES(1,"Utkarsh",29,'M');
+
+INSERT INTO CodingNinja
+VALUES(4299236,"Vaishnavi",'F','vaishnanil@gmail.com',24,1);
+(5,"AKSHAY",'M','akshaykamble61@gmail.com',25,1),
+(6,"Naval",'M','naval_16@gmail.com@',28,1),
+(7,"Aditya",'M','aditya001@gmail.com@',22,1);
+
+USE bike_analysis;
+SHOW TABLES;
+-- ALIASES AS to get a backup table
+CREATE TABLE CustomerDetails AS
+SELECT * FROM Customers;
+
+-- UPDATE Command
+SELECT Distinct AnnualIncome FROM CustomerDetails;
+
+SELECT  
+	FirstName,
+    LastName,
+    Gender,
+    AnnualIncome,
+    TotalChildren
+FROM CustomerDetails
+LIMIT 10;
+
+UPDATE CustomerDetails
+SET AnnualIncome = NULL;
+
+UPDATE CustomerDetails
+SET TotalChildren = 1
+WHERE FirstName = "CHRISTY" AND LastName = "ZHU";
+
+UPDATE CustomerDetails
+SET TotalChildren = 1
+WHERE MaritalStatus = 'M';
+
+SELECT 
+	CustomerKey,
+    FirstName,
+    LastName,
+    EmailAddress,
+    TotalChildren
+FROM CustomerDetails
+WHERE LastName = "Mehta"
+LIMIT 25;
+
+UPDATE CustomerDetails
+SET EmailAddress = "mehta@learnsector.com"
+WHERE lastName = "Mehta";
+
+-- DELETE
+DELETE FROM CustomerDetails
+WHERE lastName = "Mehta";
+
+-- Removes only Data not structure [DELETE WITHOUT WHERE CLAUSE]
+DELETE FROM CustomerDetails;
+
+-- DROP
+DROP TABLE CustomerDetails;
+
+-- ALIASES AS to get a backup table
+CREATE TABLE CustomerDetails AS
+SELECT * FROM Customers;
+
+-- TRUNCATE [DDL]
+TRUNCATE TABLE CustomerDetails;
+
+-- IS NULL / IS NOT NULL VS Empty = ""
+SELECT
+	CustomerKey,
+    FirstName,
+    LastName,
+    AnnualIncome 
+FROM Customers
+WHERE AnnualIncome = "";
+
+
+UPDATE Customers
+SET AnnualIncome = NULL
+WHERE AnnualIncome = "";
+
+SELECT
+	CustomerKey,
+    FirstName,
+    LastName,
+    AnnualIncome 
+FROM Customers
+WHERE AnnualIncome IS NULL;
+
+SELECT
+	CustomerKey,
+    FirstName,
+    LastName,
+    AnnualIncome 
+FROM Customers
+WHERE AnnualIncome IS NULL;
+
+SELECT
+	CustomerKey,
+    FirstName,
+    LastName,
+    AnnualIncome 
+FROM Customers
+WHERE AnnualIncome IS NOT NULL
+LIMIT 10;
+
+-- FIXING Prefix having "" -> replace with NULL
+SELECT
+	CustomerKey,
+    Prefix,
+    FirstName,
+    LastName
+FROM Customers
+WHERE Prefix = "";
+
+UPDATE Customers
+SET Prefix = NULL 
+WHERE Prefix = "";
+
+SELECT
+	CustomerKey,
+    Prefix,
+    FirstName,
+    LastName
+FROM Customers
+WHERE Prefix IS NULL;
+
+-- ADDING A NEW COLUMN NAME Country IN CustomerTable
+-- Adding a column at end
+ALTER TABLE Customers
+ADD COLUMN Country VARCHAR(50);
+
+-- Dropping Country Column to Teach multiple option of Add Column
+ALTER TABLE Customers
+DROP Column Country;
+
+-- Adding a column at beginning 
+ALTER TABLE Customers
+ADD COLUMN Country VARCHAR(50) FIRST;
+
+-- Adding a column at specific location 
+ALTER TABLE Customers
+ADD COLUMN Country VARCHAR(50)
+AFTER BirthDate;
+
+-- DROP Column Name MyUnknownColumn which is an unnecessary column
+ALTER TABLE Customers
+DROP Column MyUnknownColumn;
+
+-- MODIFY The Column Datatype
+ALTER TABLE Customers
+MODIFY COLUMN EmailAddress VARCHAR(100);
+
+ALTER TABLE Customers
+MODIFY COLUMN Phone_number TEXT;
+
+-- RENAME COLUMN BirthDate - DateOfBirth
+ALTER TABLE Customers
+RENAME COLUMN BirthDATE TO DateOfBirth;
+
+-- STRING Operations
+-- Length
+SELECT LENGTH('Coding Ninja');
+
+SELECT 
+	CustomerKey,
+	FirstName,
+    LENGTH(FirstName) AS firstName_length
+FROM Customers
+LIMIT 10;
+
+-- TRIM
+SELECT TRIM(BOTH 'x' FROM 'xxxxxCodingNinjasxxxxxx') AS trimmed_string;
+
+SELECT TRIM('-' FROM TRIM('x' FROM 'xxxxxCodingNinjas------')) AS trimmed_string;
+
+SELECT LTRIM('          codingNinjas') AS left_trimmed;
+
+SELECT RTRIM('          codingNinjas           ') AS right_trimmed;
+
+SELECT TRIM('          codingNinjas           ') AS trimmed_string;
+
+-- CONCAT similar to Concatenate() in Excel
+SELECT
+	FirstName, 
+    LastName,
+    CONCAT(FirstName," ",LastName) AS FullName
+FROM Customers
+LIMIT 10;
+
+-- CONCAT_WS() -- it is similar to textjoin()
+SELECT
+	Prefix,
+	FirstName, 
+    LastName,
+    CONCAT_WS(" - ",Prefix,FirstName,LastName) AS FullName
+FROM Customers
+LIMIT 10;
+
+-- Challenge to Create a new Column FullName, making it update with Concat 
+-- and drop the reference column[FirstName,LastName]
+ALTER TABLE Customers
+ADD COLUMN FullName Varchar(100)
+AFTER LastName;
+
+UPDATE Customers
+SET FullName = CONCAT(FirstName,' ',LastName);
+
+SELECT FullName From Customers LIMIT 10;
+
+ALTER TABLE Customers
+DROP COLUMN FirstName, DROP COLUMN LastName;
+
+-- SUBSTRING_INDEX - To fetch the FirstName, LastName from FullName Column
+
+ALTER TABLE Customers
+ADD Column FirstName Varchar(50)
+AFTER Prefix;
+
+ALTER TABLE Customers
+ADD Column LastName Varchar(50)
+AFTER FirstName;
+
+SELECT FirstName,LastName FROM Customers LIMIT 10;
+
+UPDATE Customers
+SET FirstName = SUBSTRING_INDEX(FullName,' ',1);
+
+UPDATE Customers
+SET LastName = SUBSTRING_INDEX(FullName,' ',-1);
+
+SELECT DISTINCT Upper(Occupation) FROM Customers;
+
+SELECT 
+	CONCAT(LOWER(FirstName),' ',LOWER(LastName)) AS FullName
+FROM Customers
+LIMIT 10;
+
+SELECT 
+	LOWER(CONCAT(FirstName,' ',LastName)) AS FullName
+FROM Customers
+LIMIT 10;
+
+SELECT 
+	CustomerKey,
+    FirstName,
+    LastName,
+    EmailAddress,
+	LEFT(EmailAddress,7) AS trimmed_address
+FROM Customers
+LIMIT 10;
+
+SELECT 
+	CustomerKey,
+    FirstName,
+    LastName,
+    EmailAddress,
+	RIGHT(EmailAddress,4) AS trimmed_address
+FROM Customers
+LIMIT 10;
+
+-- LPAD / RPAD(str,Length,padded_str)
+
+SELECT 
+	LPAD(Phone_number,10,'0') AS formatted_number
+FROM Customers
+LIMIT 15;
+
+SELECT 
+	RPAD(Phone_number,10,'0') AS formatted_number
+FROM Customers
+LIMIT 15;
+
+SELECT 
+	CONCAT('(+1)', RPAD(Phone_number,10,'0')) AS formatted_number
+FROM Customers
+LIMIT 15;
+
+-- REVERSE()
+SELECT
+	FirstName,
+	REVERSE(FirstName),
+    CONCAT(FirstName,Reverse(FirstName)) AS Palindrome_string
+FROM Customers
+LIMIT 5;
+
+-- REPLACE
+SELECT
+	ProductName,
+    ProductStyle,
+    REPLACE(ProductStyle,'0','NA') AS ReplacedColumn
+FROM Products
+WHERE ProductStyle LIKE '0';
+
+-- Updating the AnnualIncome, replacing $ & , with "" -> ALTER Command to modify the data types.
+
+UPDATE Customers
+SET AnnualIncome = REPLACE(AnnualIncome,'$',''); -- $170,000 -> 170,000
+
+UPDATE Customers
+SET AnnualIncome = REPLACE(AnnualIncome,',',''); -- 170,000 -> 1700000
+
+UPDATE Customers
+SET AnnualIncome = REPLACE(REPLACE(AnnualIncome,'$',''),',',''); 
+
+-- Now its a best time to change the data type of AnnualIncome
+
+ALTER TABLE Customers
+MODIFY COLUMN AnnualIncome INT;
+
+SELECT 
+	AnnualIncome,
+    CAST(AnnualIncome AS DECIMAL(15,2)) AS CastedAnnualIncome
+FROM Customers
+LIMIT 10;
+
+ALTER TABLE Customers
+MODIFY COLUMN AnnualIncome TEXT;
+
+SELECT 
+	AnnualIncome,
+    CAST(AnnualIncome AS DECIMAL(10,2)) AS CastedAnnualIncome
+FROM Customers
+LIMIT 10;
+
+SELECT 
+	DISTINCT ReturnDate
+FROM Returns LIMIT 10;
+
+SELECT
+	ReturnDate,
+    CAST(ReturnDate AS DATE) AS new_return_date
+FROM Returns
+LIMIT 10;
+
+-- YYYY-MM-DD [Default Date Format]
+
+SELECT
+	ReturnDate,
+    STR_TO_DATE(ReturnDate, '%c/%e/%Y') AS new_return_date
+FROM Returns
+LIMIT 10;
+
+-- 1/18/2015 [Month-Date-Year] [m/d/yyyy]
+-- 2/2/2015 [single digit month/single digit date/ 4 digit year]
+
+-- SUBSTRING
+
+SELECT SUBSTRING('Coding Ninja',5,5);
+SELECT SUBSTR('Coding Ninja',1,6);
+
+SELECT 
+	EmailAddress,
+    SUBSTR(EmailAddress,-10,10)
+FROM Customers
+LIMIT 10;
+
+SELECT 
+	EmailAddress,
+    INSTR(EmailAddress,'@') AS `@_position`,
+    INSTR(EmailAddress,'.') AS `dot-position`,
+    LENGTH(EmailAddress) AS text_length
+FROM Customers
+LIMIT 10;
+
+SELECT 
+	EmailAddress,
+    LEFT(EmailAddress,INSTR(EmailAddress,'@')-1) AS UserName,
+    SUBSTR(EmailAddress,INSTR(EmailAddress,'@')+1) AS DomainName,
+    RIGHT(EmailAddress,LENGTH(EmailAddress)-INSTR(EmailAddress,'@')) AS New_DomainName,
+    INSTR(EmailAddress,'@') AS `@_position`,
+    LENGTH(EmailAddress) AS text_length
+FROM Customers
+LIMIT 10;
+
+USE bike_analysis;
+-- Count()
+-- Count the number of unique products sell on 2015/16/17
+
+SELECT	
+	Count(DISTINCT ProductKey)
+FROM `sales-2015`;
+SELECT	
+	Count(DISTINCT ProductKey)
+FROM `sales-2016`;
+SELECT	
+	Count(DISTINCT ProductKey)
+FROM `sales-2017`;
+
+-- Count the unique products having productCost  > 1000;
+SELECT
+	Count(productKey)
+From Products
+WHERE ProductCost > 1000;
+
+SELECT
+	 Count(DISTINCT ProductSubcategoryKey)
+FROM Products;
+
+-- Calculate the Sum of Product Price, Sum of Product Cost, Total Gross Profit,
+
+SELECT
+	CAST(SUM(ProductPrice)AS DECIMAL(10,2)) AS TotalSales,
+    ROUND(SUM(ProductCost),2) AS TotalCost,
+    ROUND(SUM(ProductPrice - ProductCost),2) AS GrossProfit
+FROM Products;
+
+-- Find the TotalSales/Cost/Profit for Each ProductSubcategoryKey.
+
+SELECT
+	ProductSubcategoryKey,
+	CAST(SUM(ProductPrice)AS DECIMAL(10,2)) AS TotalSales,
+    ROUND(SUM(ProductCost),2) AS TotalCost,
+    ROUND(SUM(ProductPrice - ProductCost),2) AS GrossProfit
+FROM Products
+GROUP BY ProductSubcategoryKey
+ORDER BY GrossProfit DESC;
+
+-- Group_Concat()
+SELECT
+	GROUP_CONCAT(DISTINCT EducationLevel)
+FROM Customers;
+
+SELECT
+	GROUP_CONCAT(DISTINCT Occupation SEPARATOR ' - ')
+FROM Customers;
+SELECT
+	GROUP_CONCAT(DISTINCT SubCategoryName ORDER BY SubCategoryName SEPARATOR ' # '  ) AS SubcategoryList
+FROM `product-subcategories`;
+
+SELECT
+	GROUP_CONCAT(DISTINCT CategoryName SEPARATOR ' -> '  ) AS CategoryList
+FROM `product-categories`;
+
+-- Counting the number of customer in each occupation
+SELECT
+	Occupation,
+    COUNT(CustomerKey) AS CustomersCount
+FROM Customers
+GROUP BY Occupation;
+
+-- Counting the number of customer in each educationLevel
+SELECT
+	EducationLevel,
+    COUNT(CustomerKey) AS CustomersCount
+FROM Customers
+GROUP BY EducationLevel;
+
+-- Counting the number of customer in each occupation, educationLevel
+SELECT
+	EducationLevel, 
+    Occupation,
+    COUNT(CustomerKey) AS CustomersCount
+FROM Customers
+GROUP BY 1,2;
+
+-- HAVING CLAUSE
+SELECT
+	Occupation,
+    COUNT(CustomerKey) AS CustomersCount
+FROM Customers
+WHERE Occupation NOT LIKE "Clerical"
+GROUP BY Occupation
+Having CustomersCount > 300;
+
+SELECT
+	Occupation,
+    COUNT(CustomerKey) AS CustomersCount
+FROM Customers
+WHERE Occupation NOT LIKE "Clerical"
+GROUP BY 1
+Having CustomersCount > 300
+ORDER BY 1;
+
+-- Find the Total AnnualIncome based on Occupation / Education / Gender.
+SELECT
+	Occupation,
+    SUM(AnnualIncome) AS TotalIncome
+FROM Customers
+GROUP BY 1;
+
+SELECT
+	EducationLevel,
+    SUM(AnnualIncome) AS TotalIncome
+FROM Customers
+GROUP BY 1;
+
+SELECT
+	Gender,
+    SUM(AnnualIncome) AS TotalIncome
+FROM Customers
+GROUP BY 1;
+
+-- Find the Total AnnualIncome based on Occupation - Education where Gender = "Male".
+SELECT
+	Occupation,
+	EducationLevel,
+    SUM(AnnualIncome) AS TotalIncome
+FROM Customers
+WHERE Gender = 'M'
+GROUP BY 1,2;
+
+-- Find the AvgCost ,AvgPrice, AvgProfit having AvgProfit > 100 based on each ProductSubcategoryKey.
+
+SELECT 
+	ProductSubcategoryKey,
+    ROUND(AVG(ProductCost),0) AS AvgCost,
+    ROUND(AVG(ProductPrice),0) AS AvgPrice,
+    ROUND(ABS(AVG(ProductCost - ProductPrice)),0) AS AvgProfit
+FROM Products
+GROUP BY 1
+HAVING AvgProfit > 100;
+
+SELECT
+	Gender,
+	EducationLevel, 
+    Occupation,
+    COUNT(CustomerKey) AS CustomersCount
+FROM Customers
+GROUP BY 1,2,3
+ORDER BY 1;
+
+SHOW TABLES;
+DROP TABLE customerDetail;
+DESC Customers;
+DESC `sales-2015`;	
+
+CREATE TABLE Customer(
+	Customer_id INT NOT NULL,
+    customer_name VARCHAR(100) NOT NULL,
+    age INT
+);
+INSERT INTO Customer(Customer_id,age)
+VALUE(123,29);
+
+ALTER TABLE Customer
+MODIFY COLUMN customer_name VARCHAR(100) DEFAULT 'NA';
+
+DESC Customer;
+SELECT * FROM Customer;
+
+ALTER TABLE Customer
+ADD PRIMARY KEY(Customer_id);
+
+CREATE TABLE Orders(
+	order_id INT PRIMARY KEY,
+    Customer_id INT,
+    FOREIGN KEY(Customer_id) REFERENCES Customer(Customer_id)
+    -- ON DELETE CASCADE
+    -- ON UPDATE CASCADE
+);
+-- CASCADE,SET NULL, SET DEFAULT, RESTRICT, NO ACTION
+DESC Orders;
+DESC Customer;
+ALTER TABLE Customer
+ADD COLUMN EmailAddress VARCHAR(50) AFTER Customer_name,
+ADD COLUMN Phone_number BIGINT;
+
+ALTER TABLE Customer
+ADD CONSTRAINT UNIQUE(EmailAddress);
+
+ALTER TABLE Customer
+DROP CONSTRAINT EmailAddress;
+
+ALTER TABLE Customer
+ADD CONSTRAINT UNIQUE(Phone_number);
+
+ALTER TABLE Orders
+DROP COLUMN Customer_id;
+
+ALTER TABLE Orders
+DROP CONSTRAINT orders_ibfk_1;
+
+-- Error Code: 1828. Cannot drop column 'Customer_id': needed in a foreign key constraint 
+-- 'orders_ibfk_1'
+
+ALTER TABLE Orders
+ADD Column Customer_id INT;
+
+-- ADD [CONSTRAINT [symbol]] FOREIGN KEY
+--     [index_name] (col_name,...)
+--        reference_definition
+
+ALTER TABLE Orders
+ADD Constraint fk_customer_id
+FOREIGN KEY (customer_id) REFERENCES Customer(customer_id);
+
+
+
+DESC Orders;
+
+DESC Customer;
+ALTER TABLE Customer
+DROP COLUMN customer_id;
+
+-- Error Code: 1829. Cannot drop column 'Customer_id': needed in a foreign key constraint 
+-- 'fk_customer_id' of table 'orders'
+
+ALTER TABLE Orders
+DROP Constraint fk_customer_id;
+
+ALTER TABLE Orders
+DROP Column customer_id;
+
+DESC Orders;
+
+SHOW TABLES;
+
+DESC Customer;
+
+ALTER TABLE Customer
+ADD COLUMN customer_id INT
+FIRST;
+
+ALTER TABLE Customer
+ADD PRIMARY KEY(customer_id);
+
+DESC Customer;
+SELECT * FROM Customer;
+
+SET SQL_SAFE_UPDATES = 0;
+
+UPDATE Customer
+SET customer_id = 1
+WHERE customer_id IS NULL;
+
+DESC Orders;
+
+-- CHECK Constraint
+DESC Products;
+
+ALTER TABLE Products
+ADD CONSTRAINT check_positive_cost
+CHECK (ProductCost > 0);
+
+INSERT INTO Products(ProductCost)
+VALUES(-10);
+
+-- Error Code: 3819. Check constraint 'check_positive_cost' is violated.
+
+-- Adding Constraint on Return Quantity >0
+
+DESC Returns;
+
+ALTER TABLE Returns
+ADD CONSTRAINT check_return_quantity
+CHECK (ReturnQuantity > 0);
+
+INSERT INTO Returns(ReturnQuantity)
+VALUES(-1);
+
+-- Error Code: 3819. Check constraint 'check_return_quantity' is violated.
+
+-- JOIN [INNER JOIN / JOIN]
+SELECT 
+	p.ProductKey,
+	p.ProductName,
+    SUM(r.ReturnQuantity) AS TotalReturns
+FROM Products AS p
+INNER JOIN Returns AS r
+ON p.ProductKey = r.ProductKey
+GROUP BY 1,2
+ORDER BY 3 DESC 
+LIMIT 10;
+
+-- Error Code: 1052. Column 'ProductKey' in field list is ambiguous
+
+-- Find the products who never being returned.
+
+SELECT 
+	p.ProductKey,
+	p.ProductName,
+    SUM(r.ReturnQuantity) AS TotalReturns
+FROM Products AS p
+LEFT JOIN Returns AS r
+ON p.ProductKey = r.ProductKey
+GROUP BY 1,2
+HAVING TotalReturns IS NULL;
+
+-- Find the products who are returned.
+SELECT 
+	p.ProductKey,
+	p.ProductName,
+    SUM(r.ReturnQuantity) AS TotalReturns
+FROM Products AS p
+LEFT JOIN Returns AS r
+ON p.ProductKey = r.ProductKey
+GROUP BY 1,2
+HAVING TotalReturns IS NOT NULL;
+
+-- Finding the products which are not returned. [via return table]
+SELECT 
+	p.ProductKey,
+	p.ProductName,
+    SUM(r.ReturnQuantity) AS TotalReturns
+FROM returns AS r
+RIGHT JOIN Products AS p
+ON p.ProductKey = r.ProductKey
+GROUP BY 1,2;
+
+DESC Returns;
+
+SELECT * FROM Returns
+WHERE ReturnDate IS NULL;
+INSERT INTO Returns(ProductKey,ReturnQuantity)
+VALUES(999991,1),
+(999992,2),
+(999993,3),
+(999994,4),
+(999995,5),
+(999996,6),
+(999997,7),
+(999998,8),
+(999999,9);
+
+SELECT 
+	p.ProductKey,
+    r.returnQuantity
+FROM Products p
+RIGHT JOIN returns r
+ON p.ProductKey = r.ProductKey
+WHERE p.productKey IS NULL;
+
+USE bike_analysis;
+-- territories not present on returns table
+SELECT * FROM territories;
+
+SELECT DISTINCT(TerritoryKey) FROM returns;
+
+SELECT
+	t.SalesTerritoryKey,
+    t.Region,
+    t.Country,
+    SUM(r.returnQuantity) AS TotalReturns
+FROM territories t
+RIGHT JOIN returns r 
+ON t.SalesTerritoryKey = r.TerritoryKey
+GROUP BY 1,2,3;
+
+-- FULL JOIN 
+
+SELECT t.*, r.*
+FROM territories t
+LEFT JOIN returns r 
+ON t.SalesTerritoryKey = r.TerritoryKey
+UNION
+SELECT t.*, r.*
+FROM territories t
+RIGHT JOIN returns r 
+ON t.SalesTerritoryKey = r.TerritoryKey;
+
+DESC `sales-2015`;
+-- CHALLENGES ON JOINS
+
+SELECT
+	CONCAT(c.FirstName, ' ', c.LastName) AS FullName,
+    ProductName,
+    SUM(s.orderQuantity) AS TotalQty
+FROM (
+	SELECT * FROM `sales-2015`
+    UNION ALL
+    SELECT * FROM `sales-2016`
+    UNION ALL
+    SELECT * FROM `sales-2017`
+) AS s
+JOIN Customers c 
+ON c.CustomerKey = s.CustomerKey 
+JOIN Products p
+ON p.ProductKey = s.ProductKey
+GROUP BY 1,2
+ORDER BY 3 DESC; 
+
+SELECT Count(DISTINCT ProductKey) FROM `sales-2015`;
+SELECT Count(DISTINCT ProductKey) FROM `sales-2016`;
+SELECT Count(DISTINCT ProductKey) FROM `sales-2017`; 
+
+SELECT DISTINCT ProductName
+FROM Products p 
+WHERE p.ProductKey IN (SELECT ProductKey FROM `sales-2015`) 
+AND p.ProductKey IN (SELECT ProductKey FROM `sales-2016`)
+AND p.ProductKey IN (SELECT ProductKey FROM `sales-2017`);  
+
+-- NOT RECOMMENDED
+SELECT
+    DISTINCT ProductName
+FROM `sales-2015` s2015
+JOIN `sales-2016` s2016
+ON s2015.ProductKey = s2016.ProductKey
+JOIN `sales-2017` s2017
+ON s2016.ProductKey = s2017.ProductKey
+JOIN Products p 
+ON s2017.ProductKey = p.ProductKey;
+
+-- CROSS JOIN 
+SELECT pc.categoryName, ps.subcategoryName FROM 
+`product-categories` pc
+CROSS JOIN `product-subcategories` ps;
+
+SELECT COUNT(*) FROM `product-subcategories`;
+
+
+-- SELF JOIN
+SELECT 
+	c1.customerKey AS customer1_ID,
+    CONCAT(c1.FirstName, ' ', c1.LastName) AS Customer1_Name,
+    c2.customerKey AS customer2_ID,
+    CONCAT(c2.FirstName, ' ', c2.LastName) AS Customer2_Name,
+    c1.LastName
+FROM Customers c1
+JOIN Customers c2
+ON c1.LastName = c2.LastName
+AND c1.customerKey < c2.customerKey;
+
+-- Find the Product Detail by connecting it from sales and returns table
+SELECT
+	p.ProductName,
+    ROUND(SUM(p.ProductPrice * s.OrderQuantity),0) AS TotalSales,
+    SUM(r.ReturnQuantity) AS TotalReturns,
+    SUM(s.OrderQuantity) AS QuantitySold
+FROM Products p 
+JOIN `sales-2016` s
+ON p.ProductKey = s.ProductKey
+JOIN returns r
+ON p.productKey = r.ProductKey
+GROUP BY 1;
+
+SELECT * FROM `sales-2016`;
+
+-- Provide the detail of categoryname with total returns.
+
+SELECT
+	CategoryName,
+    SUM(ReturnQuantity) AS TotalReturns
+FROM `product-categories` pc 
+JOIN `product-subcategories` ps
+ON pc.ProductCategoryKey = ps.ProductCategoryKey
+JOIN Products p
+ON p.ProductSubcategoryKey = ps.ProductSubcategoryKey
+JOIN returns r
+ON r.ProductKey = p.ProductKey
+GROUP BY 1;
+
+USE bike_analysis;
+DESC Customers;
+
+SELECT DISTINCT AnnualIncome FROM Customers;
+
+SELECT 
+	CustomerKey, 
+	FullName, 
+    Occupation, 
+    COALESCE(AnnualIncome,0) AS AnnualIncome
+FROM Customers;
+
+SELECT COUNT(*) FROM Customers WHERE AnnualIncome IS NULL;
+
+SHOW TABLES;
+
+-- Calculate the Totalreturns by categoryName, SubcategoryName.
+SELECT
+	pc.CategoryName,
+    ps.SubcategoryName,
+    SUM(r.ReturnQuantity) AS TotalReturns
+FROM `product-categories` pc 
+JOIN `product-subcategories` ps
+ON pc.ProductCategoryKey = ps.ProductCategoryKey
+JOIN Products p 
+ON p.ProductSubcategoryKey = ps.ProductSubcategoryKey
+JOIN Returns r 
+ON p.ProductKey = r.ProductKey
+GROUP BY 1,2
+ORDER BY 3 DESC
+LIMIT 10;
+
+SELECT * FROM territories;
+SELECT DISTINCT TerritoryKey FROM returns;
+
+SELECT 
+	t.SalesTerritoryKey,
+    t.region,
+    t.Country,
+    SUM(r.ReturnQuantity) AS TotalReturns
+FROM territories AS t
+JOIN returns AS r
+ON t.SalesTerritoryKey = r.TerritoryKey
+GROUP BY 1,2,3
+HAVING TotalReturns > 200;
+
+-- Find the CategoryName with TotalExpenses, TotalSales & TotalProfit 
+SELECT
+	pc.CategoryName,
+    ROUND(SUM(p.ProductCost * s.OrderQuantity),0) AS TotalExpenses,
+    ROUND(SUM(p.ProductPrice * s.OrderQuantity),0) AS TotalSales,
+    ROUND((SUM(p.ProductPrice * s.OrderQuantity) - SUM(p.ProductCost * s.OrderQuantity)),0) AS TotalProfit,
+    SUM(r.ReturnQuantity) AS TotalReturns
+FROM(
+	SELECT * FROM `sales-2015` 
+    UNION ALL
+    SELECT * FROM `sales-2016` 
+    UNION ALL
+    SELECT * FROM `sales-2017` 
+) s 
+JOIN Products p 
+ON s.ProductKey = p.ProductKey
+JOIN `product-subcategories` ps
+ON ps.ProductSubcategoryKey = p.ProductSubcategoryKey
+JOIN `product-categories` pc 
+ON pc.ProductCategoryKey = ps.ProductCategoryKey
+JOIN Returns r 
+ON p.ProductKey = r.ProductKey
+GROUP BY pc.CategoryName;
+DESC Customers;
+DESC `sales-2015`;
+-- Top 5 customers with sales quantity XXXXXXXX
+
+SELECT
+	c.CustomerKey,
+    CONCAT(c.FirstName, " ", c.LastName) AS CustomerName,
+    SUM(s2015.OrderQuantity) AS TotalSalesQty
+FROM `sales-2015` s2015
+JOIN Customers c
+ON s2015.CustomerKey = c.CustomerKey
+GROUP BY 1,2
+UNION ALL
+SELECT
+	c.CustomerKey,
+    CONCAT(c.FirstName, " ", c.LastName) AS CustomerName,
+    SUM(s2016.OrderQuantity) AS TotalSalesQty
+FROM `sales-2016` s2016
+JOIN Customers c
+ON s2016.CustomerKey = c.CustomerKey
+GROUP BY 1,2
+UNION ALL
+SELECT
+	c.CustomerKey,
+    CONCAT(c.FirstName, " ", c.LastName) AS CustomerName,
+    SUM(s2017.OrderQuantity) AS TotalSalesQty
+FROM `sales-2017` s2017
+JOIN Customers c
+ON s2017.CustomerKey = c.CustomerKey
+GROUP BY 1,2
+ORDER BY TotalSalesQty DESC 
+LIMIT 5;
+
+-- APPENDED TABLE
+SELECT
+	c.CustomerKey,
+    CONCAT(c.FirstName, " ", c.LastName) AS CustomerName,
+    SUM(s.OrderQuantity) AS TotalSalesQty
+FROM(
+	SELECT * FROM `sales-2015` 
+    UNION ALL
+    SELECT * FROM `sales-2016` 
+    UNION ALL
+    SELECT * FROM `sales-2017` 
+) s 
+JOIN Customers c
+ON s.CustomerKey = c.CustomerKey
+GROUP BY 1,2
+ORDER BY 3 DESC 
+LIMIT 5;
+
+-- CASE STATEMENT
+DESC Customers;
+SELECT DISTINCT AnnualIncome FROM Customers;
+
+-- Creating a new column name income_category -> <50K [Low Income] , BETWEEN 50k to 100K [Moderate Income] 
+-- Else High Income.
+
+SELECT 
+	CustomerKey,
+	AnnualIncome,
+    CASE
+		WHEN AnnualIncome IS NULL THEN 'Not Available'
+		WHEN AnnualIncome < 50000 THEN 'Low Income'
+        WHEN AnnualIncome BETWEEN 50000 AND 100000 THEN 'Moderate Income'
+        ELSE 'High Income'
+    END AS IncomeCategory
+FROM Customers;
+
+DESC Customers;
+SELECT DISTINCT EducationLevel FROM Customers;
+
+-- Bachelors
+-- Partial College
+-- High School
+-- Partial High School
+-- Graduate Degree
+
+
+SELECT 
+	CustomerKey,
+	EducationLevel,
+    CASE
+		WHEN EducationLevel IN ("High School", "Partial High School") THEN "High School"
+		WHEN EducationLevel IN ("Partial College", "Bachelors") THEN "Bachelors"
+        ELSE 'Graduate Degree'
+    END AS NewEducationLevel
+FROM Customers;
+
+
+-- UPDATE THE IncomeCategory in Customer Table.
+ALTER TABLE Customers
+ADD COLUMN IncomeCategory VARCHAR(100)
+AFTER AnnualIncome;
+SELECT * FROM Customers;
+DESC Customers;
+
+SET SQL_SAFE_UPDATES = 0;
+
+UPDATE Customers
+SET IncomeCategory = CASE
+	WHEN AnnualIncome IS NULL THEN 'Not Available'
+	WHEN AnnualIncome < 50000 THEN 'Low Income'
+	WHEN AnnualIncome BETWEEN 50000 AND 100000 THEN 'Moderate Income'
+	ELSE 'High Income' 
+END;
+
+/* Find the territorykey wise orderquantity:
+    1. OrderQty > 2 -> High Sales
+    2. OrderQty [1,2] Inclusive -> Medium Sales
+    3. OrderQty < 1 -> Low Sales
+*/
+
+SELECT 
+	TerritoryKey,
+    SUM(CASE WHEN OrderQuantity>2 THEN OrderQuantity ELSE 0 END) AS HighSales,
+    SUM(CASE WHEN OrderQuantity BETWEEN 1 AND 2 THEN OrderQuantity ELSE 0 END) AS MediumSales,
+    SUM(CASE WHEN OrderQuantity < 1 THEN OrderQuantity ELSE 0 END) AS LowSales
+FROM `sales-2017`
+GROUP BY 1;
+
+
+/* Find the territorykey wise orderquantity:
+    1. OrderQty > 3 -> High Sales
+    2. OrderQty [2,3] Inclusive -> Medium Sales
+    3. OrderQty < 2 -> Low Sales
+*/
+
+SELECT 
+	TerritoryKey,
+    SUM(CASE WHEN OrderQuantity>3 THEN OrderQuantity ELSE 0 END) AS HighSales,
+    SUM(CASE WHEN OrderQuantity BETWEEN 2 AND 3 THEN OrderQuantity ELSE 0 END) AS MediumSales,
+    SUM(CASE WHEN OrderQuantity < 2 THEN OrderQuantity ELSE 0 END) AS LowSales
+FROM `sales-2017`
+GROUP BY 1;
+
+SELECT * FROM Territories;
+
+-- Classify the customer based on how frequently they return product. 
+SELECT
+	c.CustomerKey,
+    c.FullName,
+    SUM(COALESCE(r.ReturnQuantity,0)) AS TotalReturns,
+    CASE
+		WHEN SUM(COALESCE(r.ReturnQuantity,0)) > 10 THEN 'Frequent Returner'
+        WHEN SUM(COALESCE(r.ReturnQuantity,0)) BETWEEN 1 AND 10 THEN 'Occasional Returner'
+        ELSE 'Non-Returner'
+    END AS ReturnBehaviour
+FROM Customers c
+LEFT JOIN `sales-2015` s 
+ON c.CustomerKey = s.CustomerKey 
+LEFT JOIN returns r 
+ON r.ProductKey = s.ProductKey
+GROUP BY 1,2
+ORDER BY 3 DESC;
+
+SELECT DISTINCT CategoryName FROM `product-categories`;
+
+-- - Show the Total return quantity for Each Product Category break down by region.
+SELECT 
+	Region,
+    SUM(CASE WHEN CategoryName = "Bikes" THEN returnQuantity ELSE 0 END ) AS BikeReturns,
+    SUM(CASE WHEN CategoryName = "Clothing" THEN returnQuantity ELSE 0 END ) AS ClothingReturns,
+    SUM(CASE WHEN CategoryName = "Accessories" THEN returnQuantity ELSE 0 END ) AS AccessoriesReturns,
+    SUM(CASE WHEN CategoryName = "Components" THEN returnQuantity ELSE 0 END ) AS ComponentsReturns
+FROM `product-categories` pc 
+JOIN `product-subcategories` ps
+ON ps.ProductCategoryKey = pc.ProductCategoryKey
+JOIN Products p
+ON p.ProductSubcategoryKey = ps.ProductSubcategoryKey
+JOIN returns r 
+ON r.ProductKey = p.ProductKey
+JOIN territories t
+ON r.TerritoryKey = t.SalesTerritoryKey
+GROUP BY 1;
+
+-- Another CASE Query
+SELECT 
+	Region,
+    CategoryName,
+    SUM(ReturnQuantity) AS TotalReturns,
+    CASE
+		WHEN SUM(ReturnQuantity) > 50 THEN 'High Returns'
+        WHEN SUM(ReturnQuantity) > 25 THEN 'Moderate Returns'
+        ELSE 'Low Returns'
+    END AS ReturnCategory
+FROM `product-categories` pc 
+JOIN `product-subcategories` ps
+ON ps.ProductCategoryKey = pc.ProductCategoryKey
+JOIN Products p
+ON p.ProductSubcategoryKey = ps.ProductSubcategoryKey
+JOIN returns r 
+ON r.ProductKey = p.ProductKey
+JOIN territories t
+ON r.TerritoryKey = t.SalesTerritoryKey
+GROUP BY 1,2;
+
+-- USE OF CTE to make query optimize and easy to understand.......... 
+
+-- Find the CategoryName with TotalExpenses, TotalSales & TotalProfit 
+WITH CategoryInfo AS (
+	SELECT
+		pc.CategoryName,
+		ROUND(SUM(p.ProductCost * s.OrderQuantity),0) AS TotalExpenses,
+		ROUND(SUM(p.ProductPrice * s.OrderQuantity),0) AS TotalSales,
+		SUM(r.ReturnQuantity) AS TotalReturns
+    FROM(
+		SELECT * FROM `sales-2015` 
+	) s 
+	JOIN Products p 
+	ON s.ProductKey = p.ProductKey
+	JOIN `product-subcategories` ps
+	ON ps.ProductSubcategoryKey = p.ProductSubcategoryKey
+	JOIN `product-categories` pc 
+	ON pc.ProductCategoryKey = ps.ProductCategoryKey
+	JOIN Returns r 
+	ON p.ProductKey = r.ProductKey
+	GROUP BY pc.CategoryName
+)
+
+SELECT *,(TotalSales - TotalExpenses) AS TotalProfit
+FROM CategoryInfo;
+
+
+-- ROUND((SUM(p.ProductPrice * s.OrderQuantity) - SUM(p.ProductCost * s.OrderQuantity)),0) AS TotalProfit,
+
+USE bike_analysis;
+
+SELECT Avg(ProductCost) FROM Products;
+DESC Products;
+
+-- Find the Products having cost more than the average cost in their subcategory?
+WITH AvgCostPerSubcategory AS(
+	SELECT 
+		ProductSubcategoryKey,
+        ROUND(AVG(ProductCost),0) AS AvgCost
+	FROM Products
+    GROUP BY 1
+)
+SELECT 
+	p.ProductKey,
+	p.ProductName,
+    p.ProductCost,
+    ps.AvgCost
+FROM Products p
+JOIN AvgCostPerSubcategory ps 
+ON p.ProductSubcategoryKey = ps.ProductSubcategoryKey
+WHERE p.ProductCost > ps.AvgCost
+ORDER BY p.ProductCost DESC;
+
+-- Calculate the Total Sales & Total Returns for Each product Category
+WITH CategoryReturns AS(
+	SELECT 
+		CategoryName,
+		SUM(ReturnQuantity) AS TotalReturns
+	FROM returns r
+    JOIN Products p
+    ON r.ProductKey = p.ProductKey
+    JOIN `product-subcategories` ps 
+    ON ps.ProductSubcategoryKey = p.ProductSubcategoryKey
+    JOIN `product-categories` pc 
+    ON pc.ProductCategoryKey = ps.ProductCategoryKey
+    GROUP BY 1
+),
+CategorySales AS(
+	SELECT 
+		CategoryName,
+		ROUND(SUM(OrderQuantity * ProductPrice),0) AS TotalSales
+	FROM `Sales-2017` s
+    JOIN Products p
+    ON s.ProductKey = p.ProductKey
+    JOIN `product-subcategories` ps 
+    ON ps.ProductSubcategoryKey = p.ProductSubcategoryKey
+    JOIN `product-categories` pc 
+    ON pc.ProductCategoryKey = ps.ProductCategoryKey
+    GROUP BY 1
+)
+SELECT 
+	cs.CategoryName,
+    cr.TotalReturns,
+    cs.TotalSales
+FROM CategoryReturns cr
+JOIN CategorySales cs
+ON cr.CategoryName = cs.CategoryName;
+
+
+
+SELECT 
+	CategoryName,
+	SUM(ReturnQuantity) AS TotalReturns
+FROM returns r
+JOIN Products p
+ON r.ProductKey = p.ProductKey
+JOIN `product-subcategories` ps 
+ON ps.ProductSubcategoryKey = p.ProductSubcategoryKey
+JOIN `product-categories` pc 
+ON pc.ProductCategoryKey = ps.ProductCategoryKey
+GROUP BY 1;
+
+SELECT 
+	CategoryName,
+	ROUND(SUM(OrderQuantity * ProductPrice),0) AS TotalSales
+FROM `Sales-2017` s
+JOIN Products p
+ON s.ProductKey = p.ProductKey
+JOIN `product-subcategories` ps 
+ON ps.ProductSubcategoryKey = p.ProductSubcategoryKey
+JOIN `product-categories` pc 
+ON pc.ProductCategoryKey = ps.ProductCategoryKey
+GROUP BY 1;
+
+
+-- Rephrase the below code to CTE
+SELECT
+	c.CustomerKey,
+    CONCAT(c.FirstName, " ", c.LastName) AS CustomerName,
+    SUM(s.OrderQuantity) AS TotalSalesQty
+FROM(
+	SELECT * FROM `sales-2015` 
+    UNION ALL
+    SELECT * FROM `sales-2016` 
+    UNION ALL
+    SELECT * FROM `sales-2017` 
+) s 
+JOIN Customers c
+ON s.CustomerKey = c.CustomerKey
+GROUP BY 1,2
+ORDER BY 3 DESC 
+LIMIT 5;
+
+WITH AppendSales AS (
+	SELECT * FROM `sales-2015` 
+    UNION ALL
+    SELECT * FROM `sales-2016` 
+    UNION ALL
+    SELECT * FROM `sales-2017` 
+)
+SELECT
+	c.CustomerKey,
+    CONCAT(c.FirstName, " ", c.LastName) AS CustomerName,
+    SUM(s.OrderQuantity) AS TotalSalesQty
+FROM AppendSales s
+JOIN Customers c
+ON s.CustomerKey = c.CustomerKey
+GROUP BY 1,2
+ORDER BY 3 DESC 
+LIMIT 5;
+
+
+-- -> Find the each subcategoryName with average Product Cost.
+SELECT 
+	SubcategoryName,
+    ROUND(AVG(ProductCost),0) AS AvgCost
+FROM Products p
+JOIN `product-subcategories` ps 
+ON p.ProductSubcategoryKey = ps.ProductSubcategoryKey
+GROUP BY 1;
+
+SELECT AVG(ProductCost) FROM Products;
+
+SELECT SubcategoryName, (
+	SELECT ROUND(AVG(ProductCost),0) 
+	FROM Products p 
+    WHERE p.ProductSubcategoryKey = ps.ProductSubcategoryKey
+) AS AvgCost
+FROM `product-subcategories` ps 
+ORDER BY AvgCost DESC;
+
+-- -> Find the each region with total return Qty.
+SELECT 
+	region,
+    SUM(ReturnQuantity) AS TotalReturns
+FROM territories t
+LEFT JOIN returns r
+ON r.TerritoryKey = t.SalesTerritoryKey
+GROUP BY 1
+ORDER BY TotalReturns DESC;
+
+SELECT region, (
+	SELECT SUM(ReturnQuantity)
+	FROM returns r 
+    WHERE r.TerritoryKey = t.SalesTerritoryKey
+) AS TotalReturns
+FROM territories t
+ORDER BY TotalReturns DESC;
+
+USE bike_analysis;
+SELECT DISTINCT ProductSubcategoryKey , SubcategoryName FROM `product-subcategories`;
+SELECT DISTINCT ProductName,ProductCost FROM Products WHERE ProductSubcategoryKey = 1;
+SELECT 
+	s.ProductKey,
+	ROUND(SUM(s.OrderQuantity * p.ProductPrice),0) AS TotalRevenue
+FROM `sales-2017` s
+JOIN Products p 
+ON p.ProductKey = s.ProductKey
+GROUP BY s.ProductKey;
+-- List top 10 products by its Total Revenue.
+SELECT
+	p.ProductKey,
+    p.ProductName,
+    sub.TotalRevenue
+FROM Products p , 
+(
+	SELECT 
+		s.ProductKey,
+        ROUND(SUM(s.OrderQuantity * p.ProductPrice),0) AS TotalRevenue
+	FROM `sales-2017` s
+    JOIN Products p 
+    ON p.ProductKey = s.ProductKey
+    GROUP BY s.ProductKey
+) sub
+WHERE p.ProductKey = sub.ProductKey
+ORDER BY sub.TotalRevenue DESC 
+LIMIT 10;
+
+DESC Products;
+-- Find the products that are returned more than 50 times.
+SELECT
+	ProductName,
+    ModelName,
+    ProductPrice
+FROM Products p 
+WHERE (
+	SELECT 
+		SUM(ReturnQuantity)
+	FROM Returns r 
+    WHERE r.ProductKey = p.ProductKey
+) > 50;
+    
+SELECT
+	ProductName,
+    ModelName,
+    ProductPrice,
+    SUM(ReturnQuantity) AS TotalReturns
+FROM Products p
+JOIN returns r 
+ON p.ProductKey = r.ProductKey
+GROUP BY 1,2,3
+HAVING TotalReturns > 50;
+
+-- Find the products whose productPrice > avgPrice within the subcategory
+SELECT
+	ProductName,
+    ModelName,
+    ProductPrice
+FROM Products p 
+WHERE ProductPrice > (
+	SELECT 
+		AVG(ProductPrice) 
+	FROM Products p2
+    WHERE p.ProductSubcategoryKey = p2.ProductSubcategoryKey
+);
+
+SELECT
+	ProductSubcategoryKey,
+	ROUND(AVG(ProductPrice),0) AS AvgPrice
+FROM Products
+GROUP BY 1;
+
+SELECT * FROM Products;
+SELECT AVG(ProductPrice) FROM Products;
+
+SELECT
+	ProductName,
+    ModelName,
+    ProductPrice
+FROM Products p 
+WHERE ProductPrice > (
+	SELECT 
+		AVG(ProductPrice) 
+	FROM Products p2
+    WHERE p.ProductSubcategoryKey = p2.ProductSubcategoryKey
+);
+
+-- Find the products which are returned more than average return Qty. 
+SELECT
+	p.ProductName, 
+	SUM(r.ReturnQuantity) AS total_return_quantity
+FROM Products p
+JOIN returns r
+ON r.ProductKey = p.ProductKey
+GROUP BY 1
+HAVING SUM(r.ReturnQuantity) > 
+(
+	SELECT 
+		AVG(total_return_quantity)
+    FROM (
+		SELECT
+			SUM(ReturnQuantity) AS total_return_quantity
+		FROM returns
+        GROUP BY ProductKey
+    ) sub
+);
+
+SELECT
+	p.ProductName, 
+	SUM(r.ReturnQuantity) AS total_return_quantity
+FROM Products p
+JOIN returns r
+ON r.ProductKey = p.ProductKey
+GROUP BY 1;
+
+SELECT 
+		AVG(total_return_quantity)
+    FROM (
+		SELECT
+			SUM(ReturnQuantity) AS total_return_quantity
+		FROM returns
+        GROUP BY ProductKey
+    ) sub;
+    
+-- Find the regions with their return quantity using subquery in Join Clause
+SELECT
+	t.Region,
+    sub.total_return_quantity
+FROM territories t
+JOIN (
+	SELECT
+		r.TerritoryKey,
+        SUM(r.ReturnQuantity) AS total_return_quantity
+	FROM returns r
+    GROUP BY r.TerritoryKey -- 1 as an index
+) sub
+ON t.SalesTerritoryKey = sub.TerritoryKey
+ORDER BY sub.total_return_quantity DESC;
+
+WITH TotalReturnQtyTable AS (
+	SELECT
+		r.TerritoryKey,
+        SUM(r.ReturnQuantity) AS total_return_quantity
+	FROM returns r
+    GROUP BY r.TerritoryKey
+)
+SELECT
+	Region,
+    total_return_quantity
+FROM territories t
+JOIN TotalReturnQtyTable r
+ON t.SalesTerritoryKey = r.TerritoryKey
+ORDER BY total_return_quantity DESC;
+
+SELECT COUNT(*) FROM returns;
+
+-- CORRELATED SUBQUERIES.....
+USE bike_analysis;
+
+SELECT 
+	p.ProductKey,
+    p.ProductName,
+    r.returnQuantity
+FROM Products p 
+JOIN returns r
+ON p.ProductKey = r.ProductKey
+WHERE r.returnQuantity > (
+	SELECT 
+		AVG(r2.returnQuantity)
+	FROM returns r2
+    JOIN Products p2 
+    ON r2.ProductKey = p2.ProductKey
+    WHERE p2.ProductSubcategoryKey = p.ProductSubcategoryKey
+)
+ORDER BY r.returnQuantity DESC;
+
+SELECT 
+	ProductSubcategoryKey,
+	AVG(returnQuantity) 
+FROM Returns r
+JOIN Products p
+ON p.ProductKey = r.ProductKey
+GROUP BY 1;
+
+SELECT 
+	p.ProductKey,
+	returnQuantity
+FROM Returns r
+JOIN Products p
+ON p.ProductKey = r.ProductKey;
+
+SELECT 1>1;
+
+-- Return the region with maximum return value
+SELECT
+	t.Region,
+    sub.total_return_quantity
+FROM territories t
+JOIN (
+	SELECT
+		r.TerritoryKey,
+		SUM(r.ReturnQuantity) AS total_return_quantity
+	FROM returns r
+    GROUP BY r.TerritoryKey
+) sub
+ON t.SalesTerritoryKey = sub.TerritoryKey
+WHERE sub.total_return_quantity = 
+(
+	SELECT 
+		MAX(total_return_quantity)
+	FROM (
+		SELECT
+			SUM(r2.ReturnQuantity) AS total_return_quantity
+		FROM returns r2
+		GROUP BY r2.TerritoryKey
+	) sub2
+);
+
+-- DATE MANIPULATION
+DESC returns;
+DESC `sales-2015`;
+
+-- CURRENT_DATE()
+SELECT Current_DATE();
+SELECT * FROM `sales-2015`;
+
+-- Let's create table name events
+-- TIMESTAMP - [YYYY-MM-DD HH:MM:SS]
+CREATE TABLE Events(
+	event_id INT AUTO_INCREMENT,
+    event_name VARCHAR(100),
+    event_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+	delivery_date DATE,
+    PRIMARY KEY(event_id)
+);
+DESC Events;
+
+INSERT INTO Events(event_name,event_date,delivery_date)
+VALUES("audit", '2025-06-26 15:00:00', '2025-06-26');
+
+INSERT INTO events (event_name, event_date, delivery_date)
+VALUES 
+('Product Launch', '2025-07-15', '2025-07-10'),
+('Annual Meetup', '2025-08-01', '2025-07-25'),
+('Marketing Campaign', '2025-07-05', '2025-07-01'),
+('Customer Webinar', '2025-06-30', '2025-06-25'),
+('Software Deployment', '2025-07-20', '2025-07-18');
+
+SELECT * FROM Events;
+
+
+
+INSERT INTO Events(event_name,event_date,delivery_date)
+VALUES("Project X", CURRENT_TIMESTAMP() , CURRENT_DATE());
+
+SELECT CURRENT_TIME();
+
+DESC Events;
+-- Add Event With Current Time
+-- Add column Event_time
+
+ALTER TABLE Events
+ADD Column event_time TIME;
+DESC Events;
+SELECT * FROM Events;
+
+INSERT INTO Events(event_name, delivery_date, event_time)
+VALUES('Team Sync',CURRENT_DATE(), CURRENT_TIME());
+
+-- CURRENT_TIMESTAMP() OR NOW() 
+
+SELECT CURRENT_TIMESTAMP();
+SELECT NOW();
+
+SELECT YEAR('2025-06-21');
+SELECT YEAR(CURRENT_DATE());
+SELECT MONTH(CURRENT_DATE());
+SELECT DAY(CURRENT_DATE());
+
+-- Using EXTRACT to extract month/year/day from a date.
+SELECT EXTRACT(YEAR FROM CURRENT_DATE()) AS Current_year;
+DESC Events;
+SELECT 
+	event_name,
+    event_date,
+	EXTRACT(MONTH FROM event_date) AS event_month
+FROM Events;
+
+-- DATE_FORMAT -> '26th of June-2025'
+SELECT 
+	event_name,
+    event_date,
+    DATE_FORMAT(event_date, '%D of %M-%Y ') AS Formatted_date, 
+	EXTRACT(MONTH FROM event_date) AS event_month
+FROM Events;
+
+-- Date Manipulation
+USE bike_analysis;
+DESC Events;
+SELECT * FROM Events;
+
+-- DATE GROUPING
+SELECT
+	MONTH(event_date) AS month,
+    COUNT(*) AS event_count
+FROM Events
+GROUP BY 1;
+
+-- DATE Arithmetic 
+SELECT DATE_ADD('2024-05-11', INTERVAL 10 DAY) AS DateAdd;
+SELECT DATE_ADD('2024-05-11', INTERVAL -10 DAY) AS DateAdd;
+SELECT DATE_SUB('2024-05-11', INTERVAL 1 MONTH) AS DateSub;
+SELECT DATE_SUB('2024-05-11', INTERVAL -1 MONTH) AS DateSub;
+
+-- Chaining of Intervals
+
+SELECT 
+	DATE_ADD(
+		DATE_ADD('2024-05-11', INTERVAL 1 MONTH),
+        INTERVAL 10 DAY
+	) AS ChainingOfDate;
+    
+SELECT DATE_ADD('2025-06-28 19:25:57', INTERVAL 1 YEAR);
+
+SELECT * FROM Events;
+-- Update all the delivery date by +3 days from the event date ....
+DESC Events;
+SET SQL_SAFE_UPDATES = 0;
+UPDATE Events
+SET delivery_date = DATE_ADD(event_date, INTERVAL 3 DAY);
+SELECT * FROM Events;
+
+SELECT DATE_ADD('2025-06-28 19:25:57', INTERVAL 23 hour);
+SELECT DATE_ADD('2025-06-28 ', INTERVAL 25 hour);
+
+-- DATEDIFF
+SELECT
+	event_id,
+    event_name,
+    event_date,
+    delivery_date,
+    DATEDIFF(delivery_date,event_date) AS delivery_days_diff
+FROM Events;
+
+SELECT
+	*,
+    DATEDIFF(delivery_date,event_date) AS delivery_days_diff
+FROM Events;
+
+SELECT
+	*,
+    ABS(DATEDIFF(event_date,delivery_date)) AS delivery_days_diff
+FROM Events;
+
+SELECT * FROM returns; -- "mm/dd/yyyy" --> "YYYY-MM-DD"
+
+-- STR_TO_DATE 
+DESC Events;
+SELECT STR_TO_DATE('30th May 2026', '%D %M %Y');
+
+-- DATE CLEANING/ DATE PREPROCESSING IN Original Tables
+DESC Calendar;
+SELECT * FROM Calendar;
+-- Pattern DD-MM-YYYY
+-- First Rename the column to Calendar_date
+ALTER TABLE Calendar
+RENAME COLUMN date TO calendar_date;
+
+UPDATE Calendar
+SET calendar_date = STR_TO_DATE(calendar_date, "%d-%m-%Y");
+
+ALTER TABLE Calendar
+MODIFY COLUMN calendar_date DATE;
+
+SELECT COUNT(*) FROM Calendar;
+
+-- DATE CLEANING ON Customers Table
+DESC Customers;
+SELECT DISTINCT DateOfBirth FROM Customers;
+-- Pattern dd/mm/yyyy
+UPDATE Customers
+SET DateOfBirth = STR_TO_DATE(DateOfBirth, "%d/%m/%Y");
+
+SELECT COUNT(*) FROM Customers;
+
+ALTER TABLE Customers
+MODIFY COLUMN DateOfBirth DATE;
+
+-- RETURNS DATA Cleaning 
+DESC Returns;
+SELECT * FROM Returns;
+
+-- Pattern mm/dd/yyyy -- month/date is in single digit
+
+UPDATE Returns
+SET ReturnDate = STR_TO_DATE(ReturnDate, "%c/%e/%Y");
+
+SELECT COUNT(*) FROM Returns;
+
+ALTER TABLE Returns
+MODIFY COLUMN ReturnDate DATE;
+
+-- DATE Cleaning Or Date preprocessing on `sales-2015`;
+DESC `sales-2015`;
+SELECT Count(*) FROM `sales-2015`;
+SELECT * FROM `sales-2015`;
+
+UPDATE `sales-2015`
+SET OrderDate = 
+	CASE
+		WHEN OrderDate LIKE '__-__-____' THEN STR_TO_DATE(OrderDate, "%m-%d-%Y")
+        ELSE STR_TO_DATE(OrderDate, "%c/%d/%Y")
+    END;
+    
+UPDATE `sales-2015`
+SET StockDate = STR_TO_DATE(StockDate, "%m-%d-%Y")
+WHERE StockDate LIKE '__-__-____';
+
+UPDATE `sales-2015`
+SET StockDate = STR_TO_DATE(StockDate, "%c/%d/%Y")
+WHERE StockDate LIKE '%/%/%';
+
+DESC `sales-2015`;
+ALTER TABLE `sales-2015`
+MODIFY COLUMN OrderDate DATE,
+MODIFY COLUMN StockDATE DATE;
+
+-- DATE Cleaning Or Date preprocessing on `sales-2016`;
+DESC `sales-2016`;
+SELECT * FROM `sales-2016`;
+SELECT COUNT(*) FROM `sales-2016`;
+
+UPDATE `sales-2016`
+SET OrderDate = STR_TO_DATE(OrderDate, "%c/%e/%Y")
+WHERE OrderDate LIKE '%/%/%';
+
+UPDATE `sales-2016`
+SET StockDate = STR_TO_DATE(StockDate, "%c/%e/%Y")
+WHERE StockDate LIKE '%/%/%';
+
+ALTER TABLE `sales-2016`
+MODIFY COLUMN OrderDate DATE,
+MODIFY COLUMN StockDATE DATE;
+
+-- DATE Cleaning Or Date preprocessing on `sales-2017`;
+DESC `sales-2017`;
+SELECT * FROM `sales-2017`;
+SELECT COUNT(*) FROM `sales-2017`;
+
+UPDATE `sales-2017`
+SET OrderDate = STR_TO_DATE(OrderDate, "%c/%e/%Y")
+WHERE OrderDate LIKE '%/%/%';
+
+UPDATE `sales-2017`
+SET StockDate = STR_TO_DATE(StockDate, "%c/%e/%Y")
+WHERE StockDate LIKE '%/%/%';
+
+ALTER TABLE `sales-2017`
+MODIFY COLUMN OrderDate DATE,
+MODIFY COLUMN StockDATE DATE;
+
+-- WINDOW Functions 
+USE bike_analysis;
+ALTER TABLE `session 13 dataset (1)`
+RENAME To sales;
+DESC sales;
+SELECT * FROM sales;
+
+-- Find the cumulative total sum by Salesperson 
+SELECT 
+	*,
+    SUM(SaleAmount) OVER(
+		PARTITION BY Salesperson
+        ORDER BY SaleDate
+    ) AS CumulativeSalesPerPerson
+FROM sales;
+
+SELECT 
+	Salesperson,
+    SUM(SaleAmount) AS TotalSales 
+FROM sales
+GROUP BY Salesperson;
+
+-- Rank the Sales By Sales Amount
+SELECT 
+	*,
+    RANK() OVER(
+	ORDER BY SaleAmount DESC
+) AS SalesRank
+FROM sales;
+
+SELECT 
+	*,
+    DENSE_RANK() OVER(
+	ORDER BY SaleAmount DESC
+) AS SalesRank
+FROM sales;
+
+-- Finding the 3 Days Moving Average
+SELECT 
+	*,
+    AVG(SaleAmount) OVER(
+	ORDER BY SaleDate
+    ROWS BETWEEN 1 PRECEDING AND 1 FOLLOWING
+) AS MovingAverage
+FROM sales;
+
+-- Finding the 5 Days Moving Average
+SELECT 
+	*,
+    AVG(SaleAmount) OVER(
+	ORDER BY SaleDate
+    ROWS BETWEEN 2 PRECEDING AND 2 FOLLOWING
+) AS MovingAverage
+FROM sales;
+
+-- Income Difference From Average
+DESC Customers;
+
+SELECT
+	CustomerKey,
+    FullName,
+    AnnualIncome,
+    AnnualIncome - AVG(AnnualIncome) OVER() AS income_difference_from_avg
+FROM Customers;
+
+SELECT AVG(AnnualIncome) FROM Customers;
+
+-- Find the max annualIncome based on Prefix
+
+SELECT DISTINCT Prefix FROM customers;
+
+SELECT
+	CustomerKey,
+    Prefix,
+    FullName,
+    AnnualIncome,
+    MAX(AnnualIncome) OVER(Partition BY Prefix) AS max_income_by_prefix
+FROM Customers
+WHERE Prefix IS NOT NULL AND AnnualIncome IS NOT NULL;
+
+
+-- Find the max annualIncome based on Gender
+
+SELECT DISTINCT Gender FROM customers;
+
+SELECT
+	CustomerKey,
+    FullName,
+    Gender,
+    AnnualIncome,
+    MAX(AnnualIncome) OVER(Partition BY Gender) AS max_income_by_prefix
+FROM Customers;
+	
+-- Understanding CASE Statement with window Functions.....
+
+USE bike_analysis;
+SELECT
+	ProductSubcategoryKey,
+    ProductName,
+	ProductCost,
+	CASE
+		WHEN ProductCost = MAX(ProductCost) OVER(PARTITION BY ProductSubcategoryKey) THEN 'Highest'
+        WHEN ProductCost = MIN(ProductCost) OVER(PARTITION BY ProductSubcategoryKey) THEN 'Lowest'
+        ELSE 'Middle'
+    END AS CostCategory
+FROM Products;
+
+-- Within a Gender I want to the Ranking based on AnnualIncome.
+SELECT DISTINCT Gender FROM Customers;
+
+SELECT 
+	CustomerKey,
+    Gender,
+    FullName,
+    AnnualIncome,
+    RANK() OVER (partition by Gender ORDER BY AnnualIncome DESC) AS income_rank
+FROM Customers;
+
+-- Rank customers within each MaritalStatus, and order by Birthdate(oldest to youngest).
+DESC Customers;
+SELECT 
+	CustomerKey,
+    FullName,
+    MaritalStatus,
+    DateOfBirth,
+    RANK() OVER (partition by MaritalStatus ORDER BY DateOfBirth) AS rank_by_birthdate
+FROM Customers;
+
+
+-- Rank the product and create a category with case statement
+-- where the productcost is being ranked based on productsubcategoryKey.
+-- = 1 Rank [Top Rank] || <= 5 Rank [Medium Rank] || Else [Bottom Rank]
+
+SELECT
+	ProductSubcategoryKey,
+    ProductName,
+    ProductCost,
+    RANK() OVER(PARTITION BY ProductSubcategoryKey ORDER BY ProductCost DESC) AS ProductRank,
+	CASE
+		WHEN RANK() OVER(PARTITION BY ProductSubcategoryKey ORDER BY ProductCost DESC) = 1 THEN 'Top Rank'
+        WHEN RANK() OVER(PARTITION BY ProductSubcategoryKey ORDER BY ProductCost DESC) <=5 THEN 'Medium Rank'
+        ELSE 'Bottom Rank'
+    END AS CostCategory
+FROM Products;
+
+-- Optimal Code [With CTE]
+
+WITH ProductRanking AS (
+	SELECT
+		ProductSubcategoryKey,
+		ProductName,
+		ProductCost,
+		RANK() OVER(PARTITION BY ProductSubcategoryKey ORDER BY ProductCost DESC) AS ProductRank
+	FROM Products
+) 
+SELECT 
+	*,
+    CASE
+		WHEN ProductRank = 1 THEN 'Top Rank'
+        WHEN ProductRank <= 5 THEN 'Medium Rank'
+        ELSE 'Bottom Rank'
+    END AS CostCategory	
+FROM ProductRanking;
+
+-- DENSE RANK
+SELECT 
+	CustomerKey,
+    Gender,
+    FullName,
+    AnnualIncome,
+    DENSE_RANK() OVER (partition by Gender ORDER BY AnnualIncome DESC) AS income_rank
+FROM Customers;
+
+WITH ProductRanking AS (
+	SELECT
+		ProductSubcategoryKey,
+		ProductName,
+		ProductCost,
+		DENSE_RANK() OVER(PARTITION BY ProductSubcategoryKey ORDER BY ProductCost DESC) AS ProductRank
+	FROM Products
+) 
+SELECT 
+	*,
+    CASE
+		WHEN ProductRank = 1 THEN 'Top Rank'
+        WHEN ProductRank <= 3 THEN 'Medium Rank'
+        ELSE 'Bottom Rank'
+    END AS CostCategory	
+FROM ProductRanking;
+
+
+-- ROW_NUMBER()
+SELECT 
+	CustomerKey,
+    Gender,
+    FullName,
+    AnnualIncome,
+    ROW_NUMBER() OVER (partition by Gender ORDER BY AnnualIncome DESC) AS income_rank
+FROM Customers;
+
+-- LEAD() AND LAG()
+DESC Sales;
+SELECT 
+	SaleID,
+    Salesperson,
+    SaleAmount,
+    saleDate,
+    LAG(SaleAmount) OVER (PARTITION BY Salesperson ORDER BY SaleDate) AS PreviousSale,
+    LEAD(SaleAmount) OVER (PARTITION BY Salesperson ORDER BY SaleDate) AS NextSale
+FROM Sales;
+
+-- LEAD() & LAG() Challenge [Original Tables]
+DESC `sales-2015`;
+
+SELECT 
+	DATE_FORMAT(s.OrderDate, "%Y-%m") AS year_and_month,
+    ROUND(SUM(p.ProductPrice * s.OrderQuantity),0) AS TotalRevenue,
+    LAG(ROUND(SUM(p.ProductPrice * s.OrderQuantity),0)) 
+    OVER(ORDER BY DATE_FORMAT(s.OrderDate, "%Y-%m")) AS PreviousMonthRevenue,
+    LEAD(ROUND(SUM(p.ProductPrice * s.OrderQuantity),0)) 
+    OVER(ORDER BY DATE_FORMAT(s.OrderDate, "%Y-%m")) AS NextMonthRevenue
+FROM `sales-2015` s 
+JOIN Products p 
+ON p.ProductKey = s.ProductKey
+GROUP BY DATE_FORMAT(s.OrderDate, "%Y-%m")
+ORDER BY year_and_month;
+    
+-- SAME ABOVE CODE WITH CTE
+WITH Understanding_Revenue AS (
+	SELECT 
+		DATE_FORMAT(s.OrderDate, "%Y-%m") AS year_and_month,
+		ROUND(SUM(p.ProductPrice * s.OrderQuantity),0) AS TotalRevenue
+	FROM `sales-2015` s 
+	JOIN Products p 
+	ON p.ProductKey = s.ProductKey
+    GROUP BY year_and_month
+    ORDER BY year_and_month
+)
+SELECT 
+	year_and_month,
+    TotalRevenue,
+    LAG(TotalRevenue) OVER(ORDER BY year_and_month) AS PreviousMonthRevenue,
+    LEAD(TotalRevenue) OVER(ORDER BY year_and_month) AS NextMonthRevenue
+FROM Understanding_Revenue;
+
+USE bike_analysis;
+-- From the above code create a new column "SalesAmountChange"
+WITH Understanding_Revenue AS (
+	SELECT 
+		DATE_FORMAT(s.OrderDate, "%Y-%m") AS year_and_month,
+		ROUND(SUM(p.ProductPrice * s.OrderQuantity),0) AS TotalRevenue
+	FROM `sales-2015` s 
+	JOIN Products p 
+	ON p.ProductKey = s.ProductKey
+    GROUP BY year_and_month
+    ORDER BY year_and_month
+)
+SELECT 
+	year_and_month,
+    TotalRevenue,
+    LAG(TotalRevenue) OVER(ORDER BY year_and_month) AS PreviousMonthRevenue,
+    LEAD(TotalRevenue) OVER(ORDER BY year_and_month) AS NextMonthRevenue,
+    TotalRevenue - LAG(TotalRevenue) OVER(ORDER BY year_and_month) AS SalesAmountChange
+FROM Understanding_Revenue;
+
+-- Add a Sales Trend 
+WITH Understanding_Revenue AS (
+	SELECT 
+		DATE_FORMAT(s.OrderDate, "%Y-%m") AS year_and_month,
+		ROUND(SUM(p.ProductPrice * s.OrderQuantity),0) AS TotalRevenue
+	FROM `sales-2015` s 
+	JOIN Products p 
+	ON p.ProductKey = s.ProductKey
+    GROUP BY year_and_month
+    ORDER BY year_and_month
+)
+SELECT 
+	year_and_month,
+    TotalRevenue,
+    LAG(TotalRevenue) OVER(ORDER BY year_and_month) AS PreviousMonthRevenue,
+    LEAD(TotalRevenue) OVER(ORDER BY year_and_month) AS NextMonthRevenue,
+    TotalRevenue - LAG(TotalRevenue) OVER(ORDER BY year_and_month) AS SalesAmountChange,
+    CASE
+		WHEN TotalRevenue > LAG(TotalRevenue) OVER(ORDER BY year_and_month) THEN 'Increase'
+		WHEN TotalRevenue < LAG(TotalRevenue) OVER(ORDER BY year_and_month) THEN 'Decrease'
+        ELSE 'No Change'
+    END AS SalesTrend
+FROM Understanding_Revenue;
+
+-- Add a Sales Trend [Alternative Approach]
+WITH Understanding_Revenue AS (
+	SELECT 
+		DATE_FORMAT(s.OrderDate, "%Y-%m") AS year_and_month,
+		ROUND(SUM(p.ProductPrice * s.OrderQuantity),0) AS TotalRevenue
+	FROM `sales-2015` s 
+	JOIN Products p 
+	ON p.ProductKey = s.ProductKey
+    GROUP BY year_and_month
+    ORDER BY year_and_month
+)
+SELECT 
+	year_and_month,
+    TotalRevenue,
+    LAG(TotalRevenue) OVER(ORDER BY year_and_month) AS PreviousMonthRevenue,
+    LEAD(TotalRevenue) OVER(ORDER BY year_and_month) AS NextMonthRevenue,
+    TotalRevenue - LAG(TotalRevenue) OVER(ORDER BY year_and_month) AS SalesAmountChange,
+    CASE
+		WHEN TotalRevenue - LAG(TotalRevenue) OVER(ORDER BY year_and_month) > 0 THEN 'Increase'
+		WHEN TotalRevenue - LAG(TotalRevenue) OVER(ORDER BY year_and_month) < 0 THEN 'Decrease'
+        ELSE 'No Change'
+    END AS SalesTrend
+FROM Understanding_Revenue;
+
+-- Analyse the company’s year-over-year sales trend and classify each year as 
+-- "Increased", "Decreased", or "No Change" compared to the previous year.
+WITH AllSales AS (
+	SELECT * FROM `sales-2015` 
+    UNION ALL
+    SELECT * FROM `sales-2016`
+    UNION ALL
+    SELECT * FROM `sales-2017`
+),
+Understanding_Revenue AS (
+	SELECT 
+		YEAR(s.OrderDate) AS year_part,
+		ROUND(SUM(p.ProductPrice * s.OrderQuantity),0) AS TotalRevenue
+	FROM AllSales s 
+	JOIN Products p 
+	ON p.ProductKey = s.ProductKey
+    GROUP BY year_part
+    ORDER BY year_part
+)
+SELECT 
+	year_part,
+    TotalRevenue,
+    LAG(TotalRevenue) OVER(ORDER BY year_part) AS PreviousYearRevenue,
+    LEAD(TotalRevenue) OVER(ORDER BY year_part) AS NextYearRevenue,
+    CONCAT(ROUND(((TotalRevenue - LAG(TotalRevenue) OVER(ORDER BY year_part)) /  LAG(TotalRevenue) OVER(ORDER BY year_part)) * 100,0), "%")  
+    AS SalesAmountChangeInPercentage,
+    CASE
+		WHEN TotalRevenue > LAG(TotalRevenue) OVER(ORDER BY year_part) THEN 'Increase'
+		WHEN TotalRevenue < LAG(TotalRevenue) OVER(ORDER BY year_part) THEN 'Decrease'
+        ELSE 'No Change'
+    END AS SalesTrend
+FROM Understanding_Revenue;
+
+
+WITH Understanding_Revenue AS (
+	SELECT 
+		DATE_FORMAT(s.OrderDate, "%Y-%m") AS year_and_month,
+		ROUND(SUM(p.ProductPrice * s.OrderQuantity),0) AS TotalRevenue
+	FROM `sales-2017` s 
+	JOIN Products p 
+	ON p.ProductKey = s.ProductKey
+    GROUP BY year_and_month
+    ORDER BY year_and_month
+)
+SELECT 
+	year_and_month,
+    TotalRevenue,
+    LAG(TotalRevenue) OVER(ORDER BY year_and_month) AS PreviousMonthRevenue,
+    LEAD(TotalRevenue) OVER(ORDER BY year_and_month) AS NextMonthRevenue,
+    TotalRevenue - LAG(TotalRevenue) OVER(ORDER BY year_and_month) AS SalesAmountChange,
+    CASE
+		WHEN TotalRevenue > LAG(TotalRevenue) OVER(ORDER BY year_and_month) THEN 'Increase'
+		WHEN TotalRevenue < LAG(TotalRevenue) OVER(ORDER BY year_and_month) THEN 'Decrease'
+        ELSE 'No Change'
+    END AS SalesTrend
+FROM Understanding_Revenue;
+
+-- SPLIT THE ProductPrice Column into quartile ->
+SELECT 
+	ProductName,
+    ProductPrice,
+    NTILE(4) OVER(ORDER BY ProductPrice DESC) AS Price_quartile
+FROM Products;
+
+SELECT Count(*) FROM products;
+SELECT 293/5;
+
+-- Divide each month's total sales into 3 performance tiers (terciles) 
+-- to categorise months as low, medium, or high-performing.
+
+WITH MontlySales AS (
+	SELECT 
+		DATE_FORMAT(s.OrderDate, "%Y-%m") AS year_and_month,
+		ROUND(SUM(p.ProductPrice * s.OrderQuantity),0) AS TotalRevenue
+	FROM (
+		SELECT * FROM `sales-2015`
+        UNION ALL 
+        SELECT * FROM `sales-2016`
+        UNION ALL 
+        SELECT * FROM `sales-2017`
+	) AS s 
+	JOIN Products p 
+	ON p.ProductKey = s.ProductKey
+    GROUP BY year_and_month
+    ORDER BY year_and_month
+)
+SELECT 
+	year_and_month,
+    TotalRevenue,
+    NTILE(3) OVER() AS sales_tercile
+FROM MontlySales;
+
+-- Filter the products lying within the lower bound & upper bound
+WITH Product_stats AS (
+	SELECT 
+		ProductPrice,
+		NTILE(4) OVER (ORDER BY ProductPrice) AS price_quartile
+	FROM Products
+),
+quartiles AS (
+	SELECT
+		MAX(CASE WHEN price_quartile = 1 THEN ProductPrice END) AS Q1,
+		MAX(CASE WHEN price_quartile = 3 THEN ProductPrice END) AS Q3
+	FROM Product_stats
+),
+iqr_bounds AS (
+	SELECT
+		Q1,
+        Q3,
+        Q3-Q1 AS IQR,
+        Q1 - (1.5 * (Q3-Q1)) AS lower_bound,
+		Q3 + (1.5 * (Q3-Q1)) AS upper_bound
+	FROM quartiles
+)
+SELECT 
+	p.ProductKey,
+    p.ProductName,
+    p.ProductPrice
+FROM Products p
+JOIN iqr_bounds iqb
+ON p.ProductPrice BETWEEN iqb.lower_bound AND iqb.upper_bound
+ORDER BY ProductPrice;
+
+-- Detecting The Outlier
+WITH Product_stats AS (
+	SELECT 
+		ProductPrice,
+		NTILE(4) OVER (ORDER BY ProductPrice) AS price_quartile
+	FROM Products
+),
+quartiles AS (
+	SELECT
+		MAX(CASE WHEN price_quartile = 1 THEN ProductPrice END) AS Q1,
+		MAX(CASE WHEN price_quartile = 3 THEN ProductPrice END) AS Q3
+	FROM Product_stats
+),
+iqr_bounds AS (
+	SELECT
+		Q1,
+        Q3,
+        Q3-Q1 AS IQR,
+        Q1 - (1.5 * (Q3-Q1)) AS lower_bound,
+		Q3 + (1.5 * (Q3-Q1)) AS upper_bound
+	FROM quartiles
+)
+SELECT 
+	p.ProductKey,
+    p.ProductName,
+    p.ProductPrice
+FROM Products p
+JOIN iqr_bounds iqb
+ON p.ProductPrice < iqb.lower_bound OR p.ProductPrice > iqb.upper_bound
+ORDER BY ProductPrice;
+
+-- 1. Find the customers who purchased each products based on the earliest date.
+USE bike_analysis;
+
+SELECT 
+	s.ProductKey,
+    c.FullName,
+    s.OrderDate,
+	FIRST_VALUE(c.FullName) OVER (PARTITION BY  s.ProductKey ORDER BY s.OrderDate) AS first_purchase
+FROM `sales-2017` s
+JOIN Customers c
+ON c.CustomerKey = s.CustomerKey
+ORDER BY s.ProductKey;
+
+-- Find the last region where each product was sold based on the latest order date?
+SELECT
+	s.ProductKey,
+    t.region,
+    s.OrderDate,
+    LAST_VALUE(t.region) OVER(PARTITION BY s.ProductKey ORDER BY s.OrderDate
+    RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+    ) AS last_region_product_sold
+FROM territories t
+JOIN `sales-2017` s
+ON t.SalesTerritoryKey = s.TerritoryKey
+ORDER BY s.ProductKey;
+
+SELECT 
+	s.ProductKey,
+    c.FullName,
+    s.OrderDate,
+	NTH_VALUE(c.FullName, 5) OVER (PARTITION BY  s.ProductKey ORDER BY s.OrderDate
+    RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING) AS fifth_purchase
+FROM `sales-2017` s
+JOIN Customers c
+ON c.CustomerKey = s.CustomerKey
+ORDER BY s.ProductKey;
+
+-- For each customer and product subcategory, calculate the average number of days between consecutive orders.
+
+-- SELECT
+-- 		s.CustomerKey,
+--         p.ProductSubcategoryKey,
+--         s.OrderDate,
+--         LAG(s.OrderDate) OVER(
+-- 			PARTITION BY s.CustomerKey, p.ProductSubcategoryKey ORDER BY s.OrderDate
+--         ) AS prevOrderDate
+-- 	FROM products p 
+--     JOIN `sales-2017` s 
+--     ON p.ProductKey = s.ProductKey;
+
+WITH subcategory_orders AS(
+	SELECT
+		s.CustomerKey,
+        p.ProductSubcategoryKey,
+        s.OrderDate,
+        LAG(s.OrderDate) OVER(
+			PARTITION BY s.CustomerKey, p.ProductSubcategoryKey ORDER BY s.OrderDate
+        ) AS prevOrderDate
+	FROM products p 
+    JOIN `sales-2017` s 
+    ON p.ProductKey = s.ProductKey
+)
+SELECT
+	CustomerKey,
+    ProductSubcategoryKey,
+    ROUND(AVG(DATEDIFF(OrderDate,prevOrderDate)),0) AS AvgOrderDays
+FROM subcategory_orders
+WHERE prevOrderDate IS NOT NULL
+GROUP BY CustomerKey, ProductSubcategoryKey
+HAVING COUNT(*) > 1;
+
+-- Find the product that remained out of stock for the longest time and calculate how many days it was unavailable.
+WITH stock_changes AS (
+	SELECT
+		ProductKey,
+        StockDate,
+        LEAD(StockDate) OVER (PARTITION BY ProductKey ORDER BY StockDate) 
+        AS NextStockDate
+	FROM `sales-2017`
+)
+SELECT 
+	ProductKey,
+    MAX(DATEDIFF(NextStockDate,StockDate)) AS days_out_of_stock
+FROM stock_changes
+WHERE NextStockDate IS NOT NULL
+GROUP BY ProductKey
+ORDER BY days_out_of_stock DESC;
+    
+
+-- Show total sales per year and calculate the percentage growth or decline from the previous year.
+WITH Yearly_sales AS (
+	SELECT 
+		YEAR(s.OrderDate) As year_part,
+        SUM(s.OrderQuantity * p.ProductPrice) AS TotalRevenue
+	FROM (
+		SELECT * FROM `sales-2015`
+		UNION ALL 
+		SELECT * FROM `sales-2016`
+        UNION ALL
+		SELECT * FROM `sales-2017`
+    ) AS s
+    JOIN Products p
+    ON p.ProductKey = s.ProductKey
+    GROUP BY YEAR(OrderDate)
+),
+SalesTrend AS (
+	SELECT 
+		year_part,
+        TotalRevenue,
+        LAG(TotalRevenue) OVER (ORDER BY year_part) AS PrevRevenue
+	FROM Yearly_sales
+)
+SELECT 
+	year_part,
+    TotalRevenue,
+    ROUND((TotalRevenue - PrevRevenue)/PrevRevenue * 100.0, 2) AS RevenueChangePercentage
+FROM SalesTrend
+WHERE PrevRevenue IS NOT NULL;
+
+
+-- VIEWS - A Virtual Table  
+USE bike_analysis;
+CREATE OR REPLACE VIEW `Children` AS
+SELECT 
+	CustomerKey,
+    FirstName,
+    LastName,
+    TotalChildren
+FROM Customers
+WHERE TotalChildren > 3;
+
+SELECT * FROM Children;
+SELECT COUNT(*) FROM Children;
+
+CREATE OR REPLACE VIEW `SalesTrend` AS 
+SELECT 
+	DATE_FORMAT(s.OrderDate, "%Y-%m") AS year_and_month,
+	ROUND(SUM(p.ProductPrice * s.OrderQuantity),0) AS TotalRevenue
+FROM `sales-2015` s 
+JOIN Products p 
+ON p.ProductKey = s.ProductKey
+GROUP BY year_and_month
+ORDER BY year_and_month;
+
+SELECT * FROM SalesTrend;
+SHOW FULL TABLES WHERE Table_type = 'VIEW'; -- command line
+
+-- INDEXES
+DESC Customers;
+SHOW INDEXES FROM Customers;
+CREATE INDEX idx_customerKey ON Customers(CustomerKey);
+
+-- HOW TO DROP INDEX 
+DROP INDEX idx_customerKey ON Customers;
+DROP INDEX idx_occupation ON Customers;
+
+SELECT * FROM Customers WHERE Gender = 'M';
+Select * FROM Customers WHERE CustomerKey = 13061;
+
+CREATE INDEX idx_occupation ON Customers(Occupation);
+-- Error Code: 1170. BLOB/TEXT column 'Occupation' used in key specification without a key length
+CREATE INDEX idx_occupation ON Customers(Occupation(25));
+SELECT DISTINCT Occupation FROM Customers;
+SHOW INDEXES FROM Customers;
+
+-- PRIMARY INDEX [Clustered Index]
+CREATE TABLE student_info (  
+  studentid INT NOT NULL AUTO_INCREMENT,  
+  name VARCHAR(45),  
+  age VARCHAR(3),  
+  mobile VARCHAR(20),  
+  email VARCHAR(25),  
+  PRIMARY KEY (studentid), 
+  UNIQUE KEY email_UNIQUE (email) 
+);
+DESC student_info;
+SHOW INDEX FROM student_info;
+
+CREATE TABLE Employee_Detail (    
+    ID INT AUTO_INCREMENT PRIMARY KEY,     
+    Name VARCHAR(45),     
+    Email VARCHAR(45),    
+    Phone VARCHAR(15),     
+    City VARCHAR(25),  
+    UNIQUE KEY unique_email (Email)  
+);
+DESC Employee_Detail;
+SHOW INDEX FROM Employee_Detail;
+
+CREATE UNIQUE INDEX index_email_phone
+ON Employee_Detail(email,phone); 
+
+SELECT * FROM Employee_Detail;
+
+INSERT INTO Employee_Detail
+VALUES(1,'Aditya','aditya@gmail.com','9999911111','Delhi');
+INSERT INTO Employee_Detail
+VALUES(9,'Utkarsh','utkarsh@gmail.com','9999811118','Navi Mumbai');
+
+
+INSERT INTO Employee_Detail VALUES
+(2, 'Jane Smith', 'jane.smith@example.com', '9123456789', 'Delhi'),
+(3, 'Raj Kumar', 'raj.kumar@example.com', '9988776655', 'Bangalore'),
+(4, 'Priya Sharma', 'priya.sharma@example.com', '8877665544', 'Chennai'),
+(5, 'Amit Patel', 'amit.patel@example.com', '9090909090', 'Ahmedabad'),
+(6, 'Sara Khan', 'sara.khan@example.com', '8787878787', 'Hyderabad'),
+(7, 'Vikram Rao', 'vikram.rao@example.com', '7676767676', 'Pune'),
+(8, 'Neha Jain', 'neha.jain@example.com', '9898989898', 'Kolkata');
+
+SELECT * FROM Employee_Detail;
+
+INSERT INTO Employee_Detail
+VALUES(10,'Utkarsh','utkarsh1@gmail.com','9999811118','Navi Mumbai');
+
+INSERT INTO Employee_Detail
+VALUES(11,'Aditya','aditya@gmail.com','9999911112','Delhi');
+
+DROP INDEX unique_email ON Employee_Detail;
+
+-- 1. Range Partitioning
+
+CREATE TABLE Sales (
+  cust_id INT NOT NULL,
+  name VARCHAR(40),
+  store_id VARCHAR(20) NOT NULL,
+  bill_no INT NOT NULL,
+  bill_date DATE NOT NULL PRIMARY KEY,
+  amount DECIMAL(8,2) NOT NULL
+)
+PARTITION BY RANGE (YEAR(bill_date)) (
+  PARTITION p0 VALUES LESS THAN (2016),
+  PARTITION p1 VALUES LESS THAN (2017),
+  PARTITION p2 VALUES LESS THAN (2018),
+  PARTITION p3 VALUES LESS THAN (2020)
+);
+DESC Sales;
+
+INSERT INTO Sales VALUES
+(1, 'Mike', 'S001', 101, '2015-01-02', 125.56),
+(2, 'Robert', 'S003', 103, '2015-01-25', 476.50),
+(3, 'Peter', 'S012', 122, '2016-02-15', 335.00),
+(4, 'Joseph', 'S345', 121, '2016-03-26', 787.00),
+(5, 'Harry', 'S234', 132, '2017-04-19', 678.00),
+(6, 'Stephen', 'S743', 111, '2017-05-31', 864.00),
+(7, 'Jacson', 'S234', 115, '2018-06-11', 762.00),
+(8, 'Smith', 'S012', 125, '2019-07-24', 300.00),
+(9, 'Adam', 'S456', 119, '2019-08-02', 492.20);
+
+SELECT * FROM Sales;
+
+SELECT TABLE_NAME, PARTITION_NAME, TABLE_ROWS
+FROM INFORMATION_SCHEMA.PARTITIONS
+WHERE TABLE_NAME = 'Sales';
+
+
+INSERT INTO Sales VALUES
+(10, 'Mikey', 'S001', 129, '2019-01-02', 129.59);
+
+-- LIST PARTITIONING
+CREATE TABLE sales1 (
+  sale_id INT,
+  product_id INT,
+  sale_date DATE,
+  category VARCHAR(20),
+  amount DECIMAL(10,2)
+)
+PARTITION BY LIST COLUMNS (category) (
+  PARTITION p_electronics VALUES IN ('Electronics'),
+  PARTITION p_clothing VALUES IN ('Clothing'),
+  PARTITION p_furniture VALUES IN ('Furniture'),
+  PARTITION p_books VALUES IN ('Books')
+);
+
+INSERT INTO sales1 (sale_id, product_id, sale_date, category, amount) 
+VALUES 
+(1, 101, '2024-01-01', 'Electronics', 199.99),
+(2, 102, '2024-01-02', 'Clothing', 49.99),
+(3, 103, '2024-01-03', 'Furniture', 299.99),
+(4, 104, '2024-01-04', 'Books', 19.99),
+(5, 105, '2024-01-05', 'Electronics', 499.99),
+(6, 106, '2024-01-06', 'Clothing', 89.99),
+(7, 107, '2024-01-07', 'Furniture', 1299.99),
+(8, 108, '2024-01-08', 'Books', 9.99),
+(9, 109, '2024-01-09', 'Electronics', 299.99),
+(10, 110, '2024-01-10', 'Clothing', 59.99),
+(11, 111, '2024-01-11', 'Furniture', 799.99),
+(12, 112, '2024-01-12', 'Books', 14.99),
+(13, 113, '2024-01-13', 'Electronics', 399.99),
+(14, 114, '2024-01-14', 'Clothing', 109.99),
+(15, 115, '2024-01-15', 'Furniture', 499.99),
+(16, 116, '2024-01-16', 'Books', 24.99),
+(17, 117, '2024-01-17', 'Electronics', 599.99),
+(18, 118, '2024-01-18', 'Clothing', 79.99),
+(19, 119, '2024-01-19', 'Furniture', 699.99),
+(20, 120, '2024-01-20', 'Books', 29.99);
+
+SELECT * FROM sales1;
+
+SELECT TABLE_NAME, PARTITION_NAME, TABLE_ROWS
+FROM INFORMATION_SCHEMA.PARTITIONS
+WHERE TABLE_NAME = 'Sales1';
+
+INSERT INTO sales1 (sale_id, product_id, sale_date, category, amount) 
+VALUES (21, 121, '2025-01-01', 'Electronics', 197.99);
+
+-- HASH PARTITIONING
+CREATE TABLE Stores (
+  cust_name VARCHAR(40),
+  bill_no VARCHAR(20) NOT NULL,
+  store_id INT PRIMARY KEY NOT NULL,
+  bill_date DATE NOT NULL,
+  amount DECIMAL(8,2) NOT NULL
+)
+PARTITION BY HASH(store_id)
+PARTITIONS 4;
+
+INSERT INTO Stores (cust_name, bill_no, store_id, bill_date, amount) VALUES 
+('Alice', 'B001', 1, '2024-01-01', 150.75),
+('Bob', 'B002', 2, '2024-01-02', 200.00),
+('Charlie', 'B003', 3, '2024-01-03', 99.99),
+('David', 'B004', 4, '2024-01-04', 175.50),
+('Eva', 'B005', 5, '2024-01-05', 250.00),
+('Frank', 'B006', 6, '2024-01-06', 300.75),
+('Grace', 'B007', 7, '2024-01-07', 80.25),
+('Hannah', 'B008', 8, '2024-01-08', 120.50),
+('Ivan', 'B009', 9, '2024-01-09', 450.00),
+('Jack', 'B010', 10, '2024-01-10', 60.00),
+('Karen', 'B011', 11, '2024-01-11', 110.75),
+('Leo', 'B012', 12, '2024-01-12', 220.00),
+('Mia', 'B013', 13, '2024-01-13', 330.50),
+('Nathan', 'B014', 14, '2024-01-14', 55.00),
+('Olivia', 'B015', 15, '2024-01-15', 95.25),
+('Paul', 'B016', 16, '2024-01-16', 500.00);
+
+SELECT TABLE_NAME, PARTITION_NAME, TABLE_ROWS
+FROM INFORMATION_SCHEMA.PARTITIONS
+WHERE TABLE_NAME = 'Stores';
+
+INSERT INTO Stores (cust_name, bill_no, store_id, bill_date, amount)
+VALUES ('Alicy', 'B017', 17, '2025-01-01', 155.75);
+
+-- CREATE Store Procedure
+use bike_analysis;
+/* DELIMITER $$
+
+CREATE PROCEDURE procedure_name (
+  [IN | OUT | INOUT] param_name DATATYPE,
+  ...
+)
+BEGIN
+  -- Declaration section (optional)
+  -- Executable SQL statements
+END $$
+
+DELIMITER ;
+*/
+CREATE TABLE student_info (
+  stud_id INT PRIMARY KEY,
+  stud_code INT,
+  stud_name VARCHAR(50),
+  subject VARCHAR(50),
+  marks INT,
+  phone VARCHAR(15)
+);
+INSERT INTO student_info VALUES
+(1, 101, 'Mark', 'English', 68, '3454569357'),
+(2, 102, 'Joseph', 'Physics', 70, '9876543659'),
+(3, 103, 'John', 'Maths', 70, '9765326975'),
+(4, 104, 'Barack', 'Maths', 92, '87069873256'),
+(5, 105, 'Rinky', 'Maths', 85, '6753159757'),
+(6, 106, 'Adam', 'Science', 82, '79642256864'),
+(7, 107, 'Andrew', 'Science', 83, '5674243579'),
+(8, 108, 'Brayan', 'Science', 83, '7524316576'),
+(9, 109, 'Alexandar', 'Biology', 67, '2347346438');
+
+SELECT * FROM student_info;
+DESC student_info;
+
+-- NO Parameter
+-- # Get the student marks > 70 and count all students;
+DELIMITER $$
+CREATE PROCEDURE get_merit_student()
+BEGIN
+	SELECT * FROM student_info WHERE marks > 70;
+    SELECT COUNT(*) AS total_student FROM student_info;
+END $$
+DELIMITER ;
+
+CALL get_merit_student();
+
+SELECT * FROM student_info WHERE marks > 70;
+SELECT COUNT(*) AS total_student FROM student_info;
+
+-- Managing Store Procedure
+SHOW Procedure STATUS;
+SHOW Procedure STATUS WHERE Db = "bike_analysis";
+
+-- There is no option to alter the procedure - Just Drop and Recreate it.
+DROP PROCEDURE get_merit_student; -- just tell the name of the procedure
+
+DELIMITER $$
+CREATE PROCEDURE get_merit_student()
+BEGIN
+	SELECT * FROM student_info WHERE marks > 70;
+    -- SELECT COUNT(*) AS total_student FROM student_info;
+END $$
+DELIMITER ;
+
+CALL get_merit_student();
+
+INSERT INTO student_info VALUES
+(10, 101, 'Moon', 'English', 78, '3454569357'),
+(11, 102, 'Josephic', 'Physics', 80, '9876543659'),
+(12, 103, 'Johny', 'Maths', 90, '9765326975');
+SELECT * FROM student_info;
+
+-- Limit the numbers of records by taking input var -> Limit value.
+-- IN Parameter
+DELIMITER $$
+CREATE PROCEDURE get_student(IN var1 INT)
+BEGIN
+	SELECT * FROM student_info LIMIT var1;
+    -- SELECT COUNT(*) AS total_student FROM student_info;
+END $$
+DELIMITER ;
+
+CALL get_student(7);
+CALL get_student();
+-- Error Code: 1318. Incorrect number of arguments for PROCEDURE bike_analysis.get_student; expected 1, got 0
+
+-- Let's take input variable as  subject_name to apply filter.
+DELIMITER $$
+CREATE PROCEDURE get_students_by_subject(IN sub_name VARCHAR(20))
+BEGIN
+	SELECT stud_name , marks , subject
+    FROM student_info
+    WHERE subject = sub_name;
+END $$
+DELIMITER ;
+
+CALL get_students_by_subject("Maths");
+CALL get_students_by_subject("Science");
+
+-- OUT PARAMETER
+DELIMITER $$
+CREATE PROCEDURE display_highest_marks(OUT highestmarks INT)
+BEGIN
+	SELECT MAX(marks) INTO highestmarks FROM student_info;
+END $$
+DELIMITER ;
+
+CALL display_highest_marks(@m);
+SELECT @m;
+
+SELECT * FROM student_info;
+
+-- IN OUT Parameters Combination of 2 parameters ..........
+-- Count the number of students by subject
+
+DELIMITER $$
+CREATE PROCEDURE count_students_by_subject(IN sub_name VARCHAR(20), OUT total_count INT)
+BEGIN
+	SELECT count(*) INTO total_count FROM student_info WHERE subject = sub_name;
+END $$
+DELIMITER ;
+
+CALL count_students_by_subject('Maths', @student_count);
+SELECT @student_count; 
+
+CALL count_students_by_subject('Biology', @student_count);
+SELECT @student_count; 
+
+SELECT Count(*) From student_info WHERE Subject = "Maths";
+
+-- Calculate the average marks in a subject
+DELIMITER $$
+CREATE PROCEDURE get_avg_marks(IN sub_name VARCHAR(20), OUT avg_marks DECIMAL(5,2))
+BEGIN
+	SELECT 
+		AVG(marks)  INTO avg_marks
+    FROM student_info WHERE subject = sub_name;
+END $$
+DELIMITER ;
+
+CALL get_avg_marks('Maths', @avg_marks);
+SELECT @avg_marks;
+
+SELECT 
+	AVG(marks)
+FROM student_info 
+WHERE subject = "Maths";
+
+-- INOUT Parameter
+
+DELIMITER $$
+CREATE PROCEDURE display_marks(INOUT var1 INT)
+BEGIN
+	SELECT marks INTO var1 
+    FROM student_info WHERE stud_id = var1;
+END $$
+DELIMITER ;
+SET @score = 3;
+CALL display_marks(@score);
+SELECT @score;
+SELECT * FROM student_info;
+
+
+-- TRIGGERS 
+CREATE DATABASE trigger_Demo;
+USE trigger_Demo;
+
+CREATE TABLE student_info (
+  stud_id    INT PRIMARY KEY,
+  stud_code  INT UNIQUE,
+  stud_name  VARCHAR(50),
+  subject    VARCHAR(30),
+  marks      INT CHECK (marks BETWEEN 0 AND 100),
+  phone      VARCHAR(15)
+);
+
+INSERT INTO student_info (stud_id, stud_code, stud_name, subject, marks, phone) VALUES
+( 1,101,'Mark','English',68,'3454569357'),
+( 2,102,'Joseph','Physics',70,'9876543659'),
+( 3,103,'John','Maths',70,'9765326975'),
+( 4,104,'Barack','Maths',92,'87069873256'),
+( 5,105,'Rinky','Maths',85,'6753159757'),
+( 6,106,'Adam','Science',82,'79642256864'),
+( 7,107,'Andrew','Science',83,'5674243579'),
+( 8,108,'Brayan','Science',83,'7524316576'),
+( 9,109,'Alexandar','Biology',67,'2347346438'),
+(10,110,'Clara','Biology',74,'2342342345'),
+(11,111,'Derek','English',59,'4564564560'),
+(12,112,'Ella','English',91,'1231231234'),
+(13,113,'Fiona','Physics',65,'9879879876'),
+(14,114,'George','Physics',79,'3453453451'),
+(15,115,'Helen','Maths',88,'2223334445'),
+(16,116,'Ian','Science',95,'6667778880'),
+(17,117,'Jane','Biology',57,'9998887776'),
+(18,118,'Kyle','English',73,'1112223339'),
+(19,119,'Liam','Maths',81,'8887776665'),
+(20,120,'Mia','Physics',93,'4445556667');
+
+-- BEFORE INSERT
+-- Validate Marks
+
+SELECT * FROM student_info;
+
+DELIMITER $$
+	CREATE TRIGGER trg_before_insert_student
+    BEFORE INSERT ON student_info
+    FOR EACH ROW
+BEGIN
+	-- Reject the impossible marks
+    IF New.marks > 100 OR New.marks < 0 THEN
+		SIGNAL SQLSTATE '45000'
+		SET MESSAGE_TEXT = 'Marks must be between 0 And 100';
+	END IF;
+END $$
+DELIMITER ;
+
+SHOW TRIGGERS;
+
+INSERT INTO student_info
+VALUES(21,121,"Victor","Maths",105,"9839871923");
+
+INSERT INTO student_info
+VALUES(21,121,"Victor","Maths",-10,"9839871923");
+
+-- Error Code: 1644. Marks must be between 0 And 100
+
+-- AFTER TRIGGER
+-- AFTER INSERT [Audit Log]
+CREATE TABLE audit_log(
+	log_id INT AUTO_INCREMENT PRIMARY KEY,
+    action ENUM('INSERT', 'UPDATE', 'DELETE'),
+    stud_id INT,
+	log_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+DELIMITER $$
+	CREATE TRIGGER trg_after_insert_student
+    AFTER INSERT ON student_info
+    FOR EACH ROW
+BEGIN
+	INSERT INTO audit_log(action , stud_id)
+    VALUES('INSERT', NEW.stud_id);
+END $$
+DELIMITER ;
+
+INSERT INTO student_info
+VALUES(21,121,"Victor","Maths",92,"9839871923");
+
+SELECT * FROM student_info;
+SELECT  * FROM audit_log;
+
+INSERT INTO student_info VALUES (22, 122, "Aarav", "Science", 88, "9876543210");
+INSERT INTO student_info VALUES (23, 123, "Meera", "English", 75, "9812345678");
+INSERT INTO student_info VALUES (24, 124, "Rohan", "History", 81, "9823456789");
+INSERT INTO student_info VALUES (25, 125, "Sneha", "Biology", 90, "9834567890");
+INSERT INTO student_info VALUES (26, 126, "Kabir", "Computer", 95, "9845678901");
+
+
+-- AFTER UPDATE
+DELIMITER $$
+	CREATE TRIGGER trg_after_update_student
+    AFTER UPDATE ON student_info
+    FOR EACH ROW
+BEGIN
+	INSERT INTO audit_log(action , stud_id)
+    VALUES('UPDATE', NEW.stud_id);
+END $$
+DELIMITER ;
+
+SHOW TRIGGERS;
+
+UPDATE student_info 
+SET marks = 95
+WHERE stud_id = 4;
+
+SET SQL_SAFE_UPDATES = 0;
+UPDATE student_info 
+SET marks = marks + 2 
+WHERE subject = "Physics";
+
+-- AFTER DELETE
+DELIMITER $$
+	CREATE TRIGGER trg_after_delete_student
+    AFTER DELETE ON student_info
+    FOR EACH ROW
+BEGIN
+	INSERT INTO audit_log(action , stud_id)
+    VALUES('DELETE', OLD.stud_id);
+END $$
+DELIMITER ;
+
+DELETE FROM student_info WHERE stud_id = 26;
+SELECT * FROM student_info;
+SELECT  * FROM audit_log;
+
+-- BEFORE UPDATE
+
+DELIMITER $$
+	CREATE TRIGGER trg_before_update_no_marks_drop
+    BEFORE UPDATE ON student_info
+    FOR EACH ROW
+BEGIN
+    IF New.marks < OLD.marks THEN
+		SIGNAL SQLSTATE '45000'
+		SET MESSAGE_TEXT = 'Reducing Marks are not allowed';
+	END IF;
+END $$
+DELIMITER ;
+
+SHOW TRIGGERS;
+
+UPDATE student_info 
+SET marks = marks - 2 
+WHERE subject = "Physics";
+
+-- Error Code: 1644. Reducing Marks are not allowed
+
+-- BEFORE DELETE
+DELIMITER $$
+	CREATE TRIGGER trg_before_delete_high_performers
+    BEFORE DELETE ON student_info
+    FOR EACH ROW
+BEGIN
+    IF OLD.marks >= 90 THEN
+		SIGNAL SQLSTATE '45000'
+		SET MESSAGE_TEXT = 'Can not Delete high-performing students who scored >=90';
+	END IF;
+END $$
+DELIMITER ;
+
+SHOW TRIGGERS;
+SELECT * FROM student_info;
+DELETE FROM student_info WHERE stud_id = 4;
+-- Error Code: 1644. Can not Delete high-performing students who scored >=90
+DELETE FROM student_info WHERE stud_id = 24; 
+
+-- DROP TRIGGER <trigger_name>
+
+-- AFTER UPDATE [track Marks Changes]
+
+CREATE TABLE marks_history(
+	history_id INT AUTO_INCREMENT PRIMARY KEY,
+    stud_id INT,
+    old_marks INT,
+    new_marks INT,
+	changed_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+DELIMITER $$
+	CREATE TRIGGER trg_after_update_marks
+    AFTER UPDATE ON student_info
+    FOR EACH ROW
+BEGIN
+	IF OLD.marks <> NEW.marks THEN
+		INSERT INTO marks_history(stud_id,old_marks,new_marks)
+        VALUES(OLD.stud_id, OLD.marks , NEW.marks);
+	END IF;
+END $$
+DELIMITER ;
+
+SELECT * FROM student_info;
+UPDATE student_info
+SET marks = 88
+WHERE stud_id = 1;
+
+SELECT * FROM marks_history;
+
+-- STORE PROCEDURE [IN , INOUT]
+USE bike_analysis;
+SELECT * FROM student_info;
+
+-- Store Procedure -> CALL -> Update
+DELIMITER $$
+CREATE PROCEDURE increase_marks_by_id(IN in_stud_id INT , INOUT new_marks INT)
+BEGIN
+	UPDATE student_info
+    SET marks = marks + new_marks
+    WHERE stud_id = in_stud_id;
+    SELECT marks INTO new_marks
+    FROM student_info
+	WHERE stud_id = in_stud_id; 
+END $$
+DELIMITER ;
+
+SET @marks = 5;
+CALL increase_marks_by_id(7,@marks);
+SELECT @marks;
+
+
+SELECT * FROM student_info;
+
+-- TCL [Transaction Control Language]
+START TRANSACTION;
+USE bike_analysis;
+DESC Products;
+SELECT * FROM Products;
+INSERT INTO Products(ProductKey, ProductName, ProductPrice)
+VALUES(607,"Tesla ModelX", 9999.99);
+INSERT INTO Products(ProductKey, ProductName, ProductPrice)
+VALUES(608,"Tesla ModelY", 9999.99);
+INSERT INTO Products(ProductKey, ProductName, ProductPrice)
+VALUES(609,"Tesla ModelZ", 9999.99);
+COMMIT;
+ROLLBACK;
+
+SET SQL_SAFE_UPDATES = 0;
+DELETE FROM Products WHERE ProductKey = 607;
+DELETE FROM Products WHERE ProductKey = 608;
+DELETE FROM Products WHERE ProductKey = 609;
+
+-- AUTOCOMMIT = 0;
+SET AUTOCOMMIT = 0; -- AutoCommit OFF
+SET AUTOCOMMIT = 1; -- AutoCommit ON [BY DEFAULT]
+
+-- SAVEPOINT
+SELECT * FROM Products;
+START TRANSACTION;
+
+INSERT INTO Products(ProductKey, ProductName, ProductPrice)
+VALUES(607,"Tesla ModelX", 9999.99);
+
+SAVEPOINT modelX;
+
+INSERT INTO Products(ProductKey, ProductName, ProductPrice)
+VALUES(608,"Tesla ModelY", 9999.99);
+
+SAVEPOINT modelY;
+
+INSERT INTO Products(ProductKey, ProductName, ProductPrice)
+VALUES(609,"Tesla ModelZ", 9999.99);
+
+COMMIT;
+ROLLBACK TO SAVEPOINT modelX; -- it removes ModelY,ModelZ
+ROLLBACK TO SAVEPOINT modelY; -- it removes ModelZ
+ROLLBACK;
+
+
+-- ACID Properties
+CREATE TABLE bank_transactions(
+	txn_id INT AUTO_INCREMENT PRIMARY KEY,
+    account_id INT,
+    balance DECIMAL(10,2),
+    remarks VARCHAR(100),
+    txn_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+DESC bank_transactions;
+
+INSERT INTO bank_transactions(account_id, balance, remarks) VALUES
+(1, 1000.00 , 'Opening Balance'),
+(2, 2000.00 , 'Opening Balance');
+
+SELECT * FROM bank_transactions;
+
+-- ATOMICITY - ALL OR NOTHING Execution
+START TRANSACTION;
+
+INSERT INTO bank_transactions(account_id, balance, remarks) VALUES
+(1, -500.00 , 'Debit For Transfer');
+SELECT * FROM bank_transactions;
+
+INSERT INTO bank_transactions(account_id, balance, remarks) VALUES
+("INVALID" , 500.00 , 'Credit For Transfer');
+-- Error Code: 1366. Incorrect integer value: 'INVALID' for column 'account_id' at row 1
+
+ROLLBACK;
+
+
+-- ATOMICITY - ALL OR NOTHING Execution
+START TRANSACTION;
+
+INSERT INTO bank_transactions(account_id, balance, remarks) VALUES
+(1, -500.00 , 'Debit For Transfer');
+SELECT * FROM bank_transactions;
+
+INSERT INTO bank_transactions(account_id, balance, remarks) VALUES
+(2, 500.00 , 'Credit For Transfer');
+
+-- ROLLBACK;
+COMMIT;
+
+-- To find the current balance
+SELECT 
+	account_id,
+    SUM(balance) AS remaining_balance
+FROM bank_transactions
+GROUP BY account_id;
+
+-- Consistency -- total amount still be same
+START TRANSACTION;
+
+INSERT INTO bank_transactions(account_id, balance, remarks) VALUES
+(2, -1500.00 , 'Debit For Transfer');
+SELECT * FROM bank_transactions;
+
+INSERT INTO bank_transactions(account_id, balance, remarks) VALUES
+(1, 1500.00 , 'Credit For Transfer');
+
+-- ROLLBACK;
+COMMIT;
+
+-- ISOLATION  -- Transaction They Don't interfere
+START TRANSACTION;
+SELECT 
+    SUM(balance) AS remaining_balance
+FROM bank_transactions
+WHERE account_id = 1;
+
+COMMIT; -- (Don't commit yet)
+
+START TRANSACTION; -- [Parallel Transactions]
+
+INSERT INTO bank_transactions(account_id, balance, remarks) VALUES
+(1, +200.00 , 'Deposit');
+
+COMMIT;
+
+-- DURABILITY -- Changes Persists after commit
+START TRANSACTION; 
+
+INSERT INTO bank_transactions(account_id, balance, remarks) VALUES
+(1, -100.00 , 'ATM Withdrawl');
+
+COMMIT;
+
+-- After commit, even your system crashed, once commit can't rollback.
+
+
+-- Final Stage
+SELECT * FROM bank_transactions 
+ORDER BY txn_time;
+
+-- DCL [Data Control Language]
+CREATE DATABASE dcl_demo;
+USE dcl_demo;
+
+CREATE TABLE employee_data(
+	emp_id INT PRIMARY KEY,
+    emp_name VARCHAR(100),
+    salary DECIMAL(10,2)
+);
+
+DESC employee_data;
+
+# Let's create users
+CREATE USER 'report'@'localhost' IDENTIFIED BY 'report123'; 
+CREATE USER 'ops'@'localhost' IDENTIFIED BY 'ops123';
+
+# Grant Some Access to the users
+GRANT SELECT ON dcl_demo.employee_data TO 'report'@'localhost';
+GRANT INSERT ON dcl_demo.employee_data TO 'ops'@'localhost';
+
+-- "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe"
+
+INSERT INTO employee_data
+VALUES(1,"Kuldeep",100000.00);
+
+INSERT INTO employee_data VALUES
+(2,"Aman",100000.00),
+(3,"Utkarsh",100000.00 ),
+(101, 'Alice', 50000),
+(102, 'Bob', 60000),
+(103, 'Charlie', 55000);
+
+SHOW GRANTS FOR 'report'@'localhost';
+SHOW GRANTS FOR 'ops'@'localhost';
+
+REVOKE SELECT ON dcl_demo.employee_data FROM 'report'@'localhost';
+REVOKE INSERT ON dcl_demo.employee_data FROM 'ops'@'localhost';
+
+GRANT SELECT , INSERT ON dcl_demo.employee_data TO 'ops'@'localhost';
+
+CREATE USER 'engineer'@'localhost' IDENTIFIED BY 'engineer';
+GRANT ALL PRIVILEGES ON dcl_demo.employee_data TO 'engineer'@'localhost' WITH GRANT OPTION;
+
+
+-- Foreign Key -> Reference and its effect using ON DELETE/ UPDATE [CASECADE , SET NULL/DEFAULT, RESTRICT/NO ACTION]
+
+USE trigger_demo;
+
+CREATE TABLE Customers(
+	customer_id INT PRIMARY KEY,
+    name VARCHAR(50)
+);
+
+CREATE TABLE Orders (
+	order_id INT PRIMARY KEY,
+    customer_id INT,
+	order_date DATE 
+);
+
+DESC Customers;
+DESC Orders;
+
+ALTER TABLE Orders
+ADD CONSTRAINT fk_customer
+FOREIGN KEY(customer_id)
+REFERENCES Customers(customer_id)
+ON DELETE CASCADE;
+
+-- DROP THE original DELETE CASCADE to see the effect of UPDATE
+ALTER TABLE Orders
+DROP CONSTRAINT fk_customer;
+
+INSERT INTO customers (customer_id, name) VALUES
+(1, 'Alice Johnson'),
+(2, 'Bob Smith'),
+(3, 'Charlie Lee'),
+(4, 'Diana Patel'),
+(5, 'Ethan Clark'),
+(6, 'Fiona Davis'),
+(7, 'George Brown'),
+(8, 'Hannah Wilson'),
+(9, 'Ian Thompson'),
+(10, 'Julia Martinez');
+SELECT * FROM customers;
+
+INSERT INTO orders (order_id, customer_id, order_date) VALUES
+(101, 1, '2024-01-05'),
+(102, 2, '2024-01-15'),
+(103, 1, '2024-02-20'),
+(104, 3, '2024-02-25'),
+(105, 4, '2024-03-05'),
+(106, 5, '2024-03-15'),
+(107, 2, '2024-04-01'),
+(108, 6, '2024-04-10'),
+(109, 7, '2024-04-12'),
+(110, 3, '2024-04-25'),
+(111, 8, '2024-05-01'),
+(112, 9, '2024-05-10'),
+(113, 10, '2024-05-20');
+
+SELECT * FROM Orders;
+
+-- ON DELETE CASCADE
+DELETE FROM Customers WHERE customer_id = 10;
+DELETE FROM Customers WHERE customer_id = 7;
+
+-- ON UPDATE CASCADE
+ALTER TABLE Orders
+ADD CONSTRAINT fk_update_customer
+FOREIGN KEY(customer_id)
+REFERENCES Customers(customer_id)
+ON UPDATE CASCADE;
+
+ALTER TABLE Orders
+DROP CONSTRAINT fk_update_customer;
+
+UPDATE Customers SET customer_id = 10
+WHERE customer_id = 9;
+
+-- ON UPDATE SET NULL
+ALTER TABLE Orders
+ADD CONSTRAINT fk_set_null
+FOREIGN KEY(customer_id)
+REFERENCES Customers(customer_id)
+ON UPDATE SET NULL;
+
+ALTER TABLE Orders
+DROP CONSTRAINT fk_set_null;
+
+UPDATE Customers SET customer_id = 9
+WHERE customer_id = 10;
+
+-- ON DELETE SET NULL
+ALTER TABLE Orders
+ADD CONSTRAINT fk_delete_set_null
+FOREIGN KEY(customer_id)
+REFERENCES Customers(customer_id)
+ON DELETE SET NULL;
+
+ALTER TABLE Orders
+DROP CONSTRAINT fk_delete_set_null;
+
+DELETE FROM Customers WHERE customer_id = 8;
+
+-- To check the constraint :
+SELECT 
+    CONSTRAINT_NAME,
+    CONSTRAINT_TYPE,
+    TABLE_NAME
+FROM 
+    INFORMATION_SCHEMA.TABLE_CONSTRAINTS
+WHERE 
+    TABLE_NAME = 'orders'
+    AND TABLE_SCHEMA = 'trigger_demo';
+    
+-- ON DELETE / UPDATE SET DEFAULT
+DESC Customers;
+DESC orders;
+
+-- ALTER [COLUMN] col_name {SET DEFAULT {literal | (expr)}
+
+ALTER TABLE Orders
+MODIFY COLUMN customer_id INT DEFAULT 0;
+
+ALTER TABLE Orders
+ADD CONSTRAINT fk_update_restrict
+FOREIGN KEY (customer_id)
+REFERENCES Customers(customer_id)
+ON UPDATE RESTRICT;
+
+
+
+UPDATE Customers
+SET customer_id = 12
+WHERE customer_id = 2;
+
+Error Code: 1451. Cannot delete or update a parent row: a foreign key constraint fails 
+(`trigger_demo`.`orders`, CONSTRAINT `fk_update_restrict` FOREIGN KEY (`customer_id`) 
+REFERENCES `customers` (`customer_id`) ON UPDATE RESTRICT)
+
